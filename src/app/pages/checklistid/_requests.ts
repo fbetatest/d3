@@ -2,7 +2,7 @@ import axios, {AxiosResponse} from 'axios'
 import {Checklist, ChecklistQueryResponse} from './_models'
 import {ID, Response} from '../../../_metronic/helpers';
 
-const SERVER_URL=`http://localhost:4000/home/`
+const SERVER_URL = process.env.REACT_APP_SERVER_URL
 
 type Answers = {
   question?: string
