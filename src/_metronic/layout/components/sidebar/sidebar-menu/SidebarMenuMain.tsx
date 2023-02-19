@@ -1,12 +1,13 @@
 /* eslint-disable react/jsx-no-target-blank */
 
 import {useIntl} from 'react-intl'
-
+import { useAuth } from '../../../../../app/modules/auth'
 import {SidebarMenuItem} from './SidebarMenuItem'
 
 const SidebarMenuMain = () => {
   const intl = useIntl()
-
+  const {currentUser} = useAuth()
+  console.log(currentUser?.first_name)
   return (
     <>
       <SidebarMenuItem
@@ -85,19 +86,22 @@ const SidebarMenuMain = () => {
       
       />
        
-      <div className='menu-item'>
-        <div className='menu-content pt-8 pb-2'>
-          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Admin</span>
-        </div>
-      </div>
-
-      <SidebarMenuItem
+    
+{(currentUser?.first_name == "Admin Odc")?  
+<>
+  <div className='menu-item'>
+  <div className='menu-content pt-8 pb-2'>
+    <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Admin</span>
+  </div>
+</div>
+<SidebarMenuItem
         to='/apps/user-management/users'
         icon='/media/icons/duotune/communication/com006.svg'
         fontIcon='bi-person'
         title='User management'
 
-      />
+      /></>:""}
+     
 
       
     

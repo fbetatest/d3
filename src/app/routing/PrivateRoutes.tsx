@@ -21,6 +21,10 @@ import {ChecklistIDWrapper} from "../pages/checklistid/checklistid"
 import {ProjectsIDWrapper} from "../pages/projects/projectsid/projectsid"
 import { ChecklistReportWrapper } from '../pages/checklistid/checklistreport'
 
+import {NewInterviewWrapper} from "../pages/interviews/newInterview"
+import {InterviewIDWrapper} from "../pages/interviewid/interviewid"
+import { InterviewReportWrapper } from '../pages/interviewid/interviewreport'
+
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -42,6 +46,7 @@ const PrivateRoutes = () => {
         <Route path='projects-page' element={<ProjectsWrapper />} />
         <Route path='new-project' element={<NewProjectWrapper />} />
         <Route path='new-checklist' element={<NewChecklistWrapper />} />
+        <Route path='new-interview' element={<NewInterviewWrapper />} />
         <Route path='reports-page' element={<ReportWrapper />} />
         <Route path='interviews-page' element={<InterviewsWrapper />} />
         <Route path='checklists-page' element={<ChecklistsWrapper />} />
@@ -50,7 +55,9 @@ const PrivateRoutes = () => {
         <Route path='journeytime-page' element={<JourneyTimeWrapper />} />
         <Route path='ticketsraised-page' element={<TicketsraisedWrapper />} />
         <Route path='checklist/:id' element={<ChecklistIDWrapper />} />
+        <Route path='interview/:id' element={<InterviewIDWrapper />} />
         <Route path='checklist-report/:id' element={<ChecklistReportWrapper />} />
+        <Route path='interview-report/:id' element={<InterviewReportWrapper />} />
         <Route path='project/:id' element={<ProjectsIDWrapper />} />
         {/* Lazy Modules */}
         <Route

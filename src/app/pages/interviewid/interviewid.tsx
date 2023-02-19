@@ -3,13 +3,13 @@ import {useParams} from 'react-router-dom'
 import {FC} from 'react'
 import {useFormik} from 'formik'
 import {useState, useEffect} from 'react'
-import {getChecklist} from '../checklists/_requests'
+import {getInterview} from '../interviews/_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 import {useNavigate} from 'react-router-dom'
 import {Formik, Form, Field, FieldArray} from 'formik'
-import { saveChecklistData } from './_requests'
+import { saveInterviewData } from './_requests'
 
-const ChecklistID: FC = () => {
+const InterviewID: FC = () => {
   const navigate = useNavigate();
   const {id} = useParams()
   console.log(id)
@@ -19,9 +19,9 @@ const ChecklistID: FC = () => {
   console.log(id)
   const vid: number = +tempId
 
-  const [checklistData, setChecklistData] = useState({
+  const [interviewData, setInterviewData] = useState({
     id: 0,
-    checklistName: 'Loading..',
+    interviewName: 'Loading..',
     projectName: '',
     created: 0,
     vid: 0,
@@ -30,21 +30,21 @@ const ChecklistID: FC = () => {
 
   useEffect(() => {
     console.log('useEffect')
-    getChecklist(vid).then((val) => {
+    getInterview(vid).then((val) => {
       const {data} = val
-      setChecklistData(data)
+      setInterviewData(data)
       console.log(data)
     })
   }, [])
 
-  const extraFields = checklistData.questions.map((val, index) => {
+  const extraFields = interviewData.questions.map((val, index) => {
     return {question: val.fieldName, fieldValue: '', fieldOptions: []}
   })
 
   return (
     <>
-      <PageTitle breadcrumbs={[]}>{checklistData.checklistName}</PageTitle>
-      <div className='fw-semibold fs-6 mb-2'>Project: {checklistData.projectName}</div>
+      <PageTitle breadcrumbs={[]}>{interviewData.interviewName}</PageTitle>
+      <div className='fw-semibold fs-6 mb-2'>Project: {interviewData.projectName}</div>
 
       <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-900px'>
         <div className='card-body py-3'>
@@ -59,12 +59,12 @@ const ChecklistID: FC = () => {
 
                   
 
-                  saveChecklistData(
-                    checklistData.checklistName,
-                    checklistData.vid,
-                     checklistData.projectName,
+                  saveInterviewData(
+                    interviewData.interviewName,
+                    interviewData.vid,
+                     interviewData.projectName,
                     values.answers
-                  ).then(()=>navigate('/../checklists-page'))
+                  ).then(()=>navigate('/../interviews-page'))
                
                 }}
               >
@@ -75,7 +75,7 @@ const ChecklistID: FC = () => {
                       render={(arrayHelpers) => {
                         return (
                           <div>
-                            {checklistData.questions.map((val, index) => {
+                            {interviewData.questions.map((val, index) => {
                               return (
                                 <div className='card pe-6' key={index}>
                                   <div className='form-group'>
@@ -121,10 +121,10 @@ const ChecklistID: FC = () => {
                                       ''
                                     )}
                                     {val.fieldType == 'checkbox' ? (
-                                      <div role='group' aria-labelledby='checkbox-group' className="ms-2">
+                                      <div role='group' aria-labelledby='checkbox-group'>
                                         {val.fieldOptions.split(',').map((option, i) => {
                                           return  <label key={i}
-                                          className='form-check form-check-sm form-check-custom form-check-solid me-5 mb-3'>
+                                          className='form-check form-check-sm form-check-custom form-check-solid me-5 ms-2 mb-3'>
                                           <Field type="checkbox" 
                                           className='form-check-input me-2'
                                           name={`answers.${index}.fieldOptions`} 
@@ -167,12 +167,12 @@ const ChecklistID: FC = () => {
   )
 }
 
-const ChecklistIDWrapper: FC = () => {
+const InterviewIDWrapper: FC = () => {
   return (
     <>
-      <ChecklistID />
+      <InterviewID />
     </>
   )
 }
 
-export {ChecklistIDWrapper}
+export {InterviewIDWrapper}

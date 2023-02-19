@@ -3,13 +3,13 @@ import {useParams} from 'react-router-dom'
 import {FC} from 'react'
 import {useFormik} from 'formik'
 import {useState, useEffect} from 'react'
-import {getChecklist} from '../checklists/_requests'
+import {getInterview} from '../interviews/_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 import {useNavigate} from 'react-router-dom'
 import {Formik, Form, Field, FieldArray} from 'formik'
-import {getChecklistData, saveChecklistData} from './_requests'
+import {getInterviewData, saveInterviewData} from './_requests'
 
-const ChecklistReport: FC = () => {
+const InterviewReport: FC = () => {
   const {id} = useParams()
   console.log(id)
 
@@ -18,9 +18,9 @@ const ChecklistReport: FC = () => {
   console.log(id)
   const vid: number = +tempId
 
-  const [checklistData, setChecklistData] = useState({
+  const [interviewData, setInterviewData] = useState({
     id: 0,
-    checklistName: 'Loading..',
+    interviewName: 'Loading..',
     projectName: '',
     created: 0,
     vid: 0,
@@ -45,12 +45,13 @@ const ChecklistReport: FC = () => {
   useEffect(() => {
     console.log('useEffect')
 
-    getChecklistData(vid).then((val) => {
+    getInterviewData(vid).then((val) => {
       const {data} = val
+      if(data.length){
 
       console.log(data)
-      setChecklistData(data[0])
-      console.log(checklistData)
+      setInterviewData(data[0])
+      console.log(interviewData)
       let tempAnswersData: [Answers] = [
         {
           question: '',
@@ -73,6 +74,21 @@ const ChecklistReport: FC = () => {
       const dl = data[0].answers.length
       console.log(dl)
       setDatalength(dl)
+
+    }
+
+    else{
+
+      setInterviewData({
+        id: 0,
+        interviewName: 'No data found..',
+        projectName: '[]',
+        created: 0,
+        vid: 0,
+
+      })
+
+    }
     })
   }, [])
 
@@ -87,8 +103,8 @@ const ChecklistReport: FC = () => {
             <div className='border-0 pt-5'>
               
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1 '>{checklistData.checklistName}</span>
-          <div className='card-label fw-bold fs-6 mb-3 pt-2'>Project: {checklistData.projectName}</div>
+          <span className='card-label fw-bold fs-3 mb-1 '>{interviewData.interviewName}</span>
+          <div className='card-label fw-bold fs-6 mb-3 pt-2'>Project: {interviewData.projectName}</div>
         </h3>
         
         <div className='card-toolbar'>
@@ -138,15 +154,15 @@ const ChecklistReport: FC = () => {
   )
 }
 
-const ChecklistReportWrapper: FC = () => {
+const InterviewReportWrapper: FC = () => {
   return (
     <>
-      <ChecklistReport />
+      <InterviewReport />
     </>
   )
 }
 
-export {ChecklistReportWrapper}
+export {InterviewReportWrapper}
 
 /*
 
@@ -156,13 +172,13 @@ import {useParams} from 'react-router-dom'
 import {FC} from 'react'
 import {useFormik} from 'formik'
 import {useState, useEffect} from 'react'
-import {getChecklist} from '../checklists/_requests'
+import {getInterview} from '../interviews/_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 import {useNavigate} from 'react-router-dom'
 import {Formik, Form, Field, FieldArray} from 'formik'
-import { getChecklistData, saveChecklistData } from './_requests'
+import { getInterviewData, saveInterviewData } from './_requests'
 
-const ChecklistReport: FC = () => {
+const InterviewReport: FC = () => {
   const {id} = useParams()
   console.log(id)
 
@@ -171,9 +187,9 @@ const ChecklistReport: FC = () => {
   console.log(id)
   const vid: number = +tempId
 
-  const [checklistData, setChecklistData] = useState({
+  const [interviewData, setInterviewData] = useState({
     id: 0,
-    checklistName: 'Loading..',
+    interviewName: 'Loading..',
     projectName: '',
     created: 0,
     vid: 0,
@@ -197,12 +213,12 @@ const ChecklistReport: FC = () => {
     console.log('useEffect')
     
 
-    getChecklistData(vid).then((val)=> {
+    getInterviewData(vid).then((val)=> {
         const {data} = val
 
         console.log(data)
-        setChecklistData(data[0])
-        console.log(checklistData)
+        setInterviewData(data[0])
+        console.log(interviewData)
         let tempAnswersData: [Answers] = [{
             question: "",
             fieldValue: "",
@@ -238,7 +254,7 @@ console.log(dl)
 
   return (
     <>
-      <PageTitle breadcrumbs={[]}>{checklistData.checklistName}</PageTitle>
+      <PageTitle breadcrumbs={[]}>{interviewData.interviewName}</PageTitle>
       <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-800px'>
         <div className='card-body py-3 pt-3 pb-3'>
           <div className='row g-5 gx-xxl-12'>
@@ -293,15 +309,15 @@ return <>
   )
 }
 
-const ChecklistReportWrapper: FC = () => {
+const InterviewReportWrapper: FC = () => {
   return (
     <>
-      <ChecklistReport />
+      <InterviewReport />
     </>
   )
 }
 
-export {ChecklistReportWrapper}
+export {InterviewReportWrapper}
 
 
 */

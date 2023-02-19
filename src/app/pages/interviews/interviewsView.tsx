@@ -3,22 +3,22 @@ import {KTSVG} from '../../../_metronic/helpers'
 import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import {FC} from 'react'
-import { deleteChecklist, getAllChecklist} from './_requests'
+import { deleteInterview, getAllInterview} from './_requests'
 
 type Props = {
   className: string
 }
 
 const TablesWidget11: React.FC<Props> = ({className}) => {
-  const [checklistData, setChecklistData] = useState([
-    {id: 0, checklistName: 'Loading..', projectName: '', created: 0},
+  const [interviewData, setInterviewData] = useState([
+    {id: 0, interviewName: 'Loading..', projectName: '', created: 0},
   ])
 
   useEffect(() => {
-    getAllChecklist().then((val)=>{
+    getAllInterview().then((val)=>{
    const {data} = val;
    console.log(data);
-   setChecklistData(data)
+   setInterviewData(data)
     })
     
   }, [])
@@ -32,16 +32,16 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
 
       <div className='card-header  border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Checklists</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Interviews</span>
         </h3>
         <div className='card-toolbar'>
           <Link
-            to='/new-checklist'
+            to='/new-interview'
             className='btn btn-sm btn-light-primary'
          
           >
             <KTSVG path='/media/icons/duotune/arrows/arr075.svg' className='svg-icon-2' />
-            New Checklist
+            New Interview
           </Link>
         </div>
       </div>
@@ -70,7 +70,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
             {/* begin::Table body */}
 
             <tbody>
-              {checklistData.map((val, id) => {
+              {interviewData.map((val, id) => {
                 return (
                   <tr key={id}>
                     <td>
@@ -80,10 +80,10 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                       <div className='d-flex align-items-center'>
                         <div className='d-flex justify-content-start flex-column'>
                           <Link
-                            to={'../checklist/' + val.created}
+                            to={'../interview/' + val.created}
                             className='text-dark fw-bold text-hover-primary mb-1 fs-6'
                           >
-                            {val.checklistName}
+                            {val.interviewName}
                           </Link>
                         </div>
                       </div>
@@ -107,7 +107,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     <td className='text-end'>
                     
                       <button
-                        onClick = { () => {deleteChecklist(val.created); setChecklistData(checklistData.filter(item => item.created !== val.created))} }
+                        onClick = { () => {deleteInterview(val.created); setInterviewData(interviewData.filter(item => item.created !== val.created))} }
                   
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
@@ -132,7 +132,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
   )
 }
 
-const ChecklistsView: FC = () => {
+const InterviewsView: FC = () => {
   return (
     <>
       <TablesWidget11 className='card-xxl-stretch mb-5 mb-xxl-8' />
@@ -140,5 +140,5 @@ const ChecklistsView: FC = () => {
   )
 }
 
-export {ChecklistsView}
+export {InterviewsView}
 

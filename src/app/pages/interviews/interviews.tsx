@@ -1,13 +1,6 @@
 
 import {PageTitle} from '../../../_metronic/layout/core'
-import {
-
-
-  TablesWidget15,
- 
-
-
-} from '../../../_metronic/partials/widgets'
+import {InterviewsView} from './interviewsView'
 import {FC} from 'react'
 
 const InterviewsPage: FC = () => (
@@ -19,7 +12,7 @@ const InterviewsPage: FC = () => (
       <div className='row g-5 gx-xxl-12'>
       
       <div className='col-xxl-12'>
-        <TablesWidget15 className='card-xxl-stretch mb-5 mb-xxl-8' />
+      <InterviewsView />
       </div>
     </div>
     </>
