@@ -77,14 +77,7 @@ const SidebarMenuMain = () => {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen022.svg'
       />
-          <SidebarMenuItem
-           to='/ticketsraised-page'
       
-        title='Tickets Raised'
-        fontIcon='bi-archive'
-        icon='/media/icons/duotune/general/gen022.svg'
-      
-      />
        
     
 {(currentUser?.first_name == "Admin Odc")?  

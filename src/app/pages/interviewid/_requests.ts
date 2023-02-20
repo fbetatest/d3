@@ -35,3 +35,12 @@ export function getInterviewData(vid: number) {
   console.log(data)
   return data
 }
+
+export function getInterviewByProject(id: String){
+  console.log(id)
+  const data = axios.post(`${SERVER_URL}getinterviewbyproject`,{"id":id})
+
+  
+  return data
+
+}

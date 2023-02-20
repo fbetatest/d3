@@ -12,7 +12,7 @@ export function Overview() {
      
 
       <div className='col-xl-12'>
-        <ChartsWidget1 className='mb-5 mb-xxl-8' />
+        
 
         
       </div>

@@ -47,7 +47,7 @@ const ChecklistReport: FC = () => {
 
     getChecklistData(vid).then((val) => {
       const {data} = val
-
+      if(data.length){
       console.log(data)
       setChecklistData(data[0])
       console.log(checklistData)
@@ -73,7 +73,21 @@ const ChecklistReport: FC = () => {
       const dl = data[0].answers.length
       console.log(dl)
       setDatalength(dl)
+    }
+    else{
+
+      setChecklistData({
+        id: 0,
+        checklistName: 'No data found..',
+        projectName: '[]',
+        created: 0,
+        vid: 0,
+
+      })
+
+    }
     })
+  
   }, [])
 
   return (

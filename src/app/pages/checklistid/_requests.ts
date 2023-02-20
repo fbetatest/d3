@@ -35,3 +35,12 @@ export function getChecklistData(vid: number) {
   console.log(data)
   return data
 }
+
+export function getChecklistByProject(id: String){
+  console.log(id)
+  const data = axios.post(`${SERVER_URL}getchecklistbyproject`,{"id":id})
+
+  
+  return data
+
+}
