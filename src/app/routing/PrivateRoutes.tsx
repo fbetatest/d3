@@ -13,7 +13,7 @@ import {ReportWrapper} from "../pages/reports/reportsPage"
 import {InterviewsWrapper} from "../pages/interviews/interviews"
 import {ChecklistsWrapper} from "../pages/checklists/checklists"
 import {NewChecklistWrapper} from "../pages/checklists/newChecklist"
-import {GeofencingWrapper} from "../pages/geofencing/geofencing"
+
 import {JourneyTimeWrapper} from "../pages/journeytime/journeytime"
 import {CoordinatesWrapper} from "../pages/coordinates/coordinates"
 import {TicketsraisedWrapper} from "../pages/ticketsraised/ticketsraised"
@@ -24,6 +24,13 @@ import { ChecklistReportWrapper } from '../pages/checklistid/checklistreport'
 import {NewInterviewWrapper} from "../pages/interviews/newInterview"
 import {InterviewIDWrapper} from "../pages/interviewid/interviewid"
 import { InterviewReportWrapper } from '../pages/interviewid/interviewreport'
+
+
+import {GeofencingsWrapper} from "../pages/geofencing/geofencing"
+import {NewGeofencingWrapper} from "../pages/geofencing/newGeofencing"
+import {GeofencingIDWrapper} from "../pages/geofencingid/geofencingid"
+import { GeofencingReportWrapper } from '../pages/geofencingid/geofencingreport'
+
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -47,17 +54,20 @@ const PrivateRoutes = () => {
         <Route path='new-project' element={<NewProjectWrapper />} />
         <Route path='new-checklist' element={<NewChecklistWrapper />} />
         <Route path='new-interview' element={<NewInterviewWrapper />} />
+        <Route path='new-geofencing' element={<NewGeofencingWrapper />} />
         <Route path='reports-page' element={<ReportWrapper />} />
         <Route path='interviews-page' element={<InterviewsWrapper />} />
         <Route path='checklists-page' element={<ChecklistsWrapper />} />
-        <Route path='geofencing-page' element={<GeofencingWrapper />} />
+        <Route path='geofencing-page' element={<GeofencingsWrapper />} />
         <Route path='coordinates-page' element={<CoordinatesWrapper />} />
         <Route path='journeytime-page' element={<JourneyTimeWrapper />} />
         <Route path='ticketsraised-page' element={<TicketsraisedWrapper />} />
         <Route path='checklist/:id' element={<ChecklistIDWrapper />} />
         <Route path='interview/:id' element={<InterviewIDWrapper />} />
+        <Route path='geofencing/:id' element={<GeofencingIDWrapper />} />
         <Route path='checklist-report/:id' element={<ChecklistReportWrapper />} />
         <Route path='interview-report/:id' element={<InterviewReportWrapper />} />
+        <Route path='geofencing-report/:id' element={<GeofencingReportWrapper />} />
         <Route path='project/:id' element={<ProjectsIDWrapper />} />
         {/* Lazy Modules */}
         <Route
