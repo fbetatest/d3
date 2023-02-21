@@ -7,6 +7,8 @@
     "@formatjs/intl-relativetimeformat": "10.0.1",
     "@fortawesome/fontawesome-free": "6.1.1",
     "@popperjs/core": "2.11.6",
+    "@tomtom-international/web-sdk-maps": "^6.23.0",
+    "@turf/turf": "^6.5.0",
     "animate.css": "4.1.1",
     "apexcharts": "3.35.0",
     "axios": "0.26.1",
