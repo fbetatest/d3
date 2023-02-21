@@ -15,6 +15,8 @@ import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, FieldArray} from 'formik'
 import {getProjectNames} from '../projects/core/_requests'
 
+const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
+
 const NewGeofencing = () => {
   const navigate = useNavigate()
 
@@ -45,13 +47,52 @@ const NewGeofencing = () => {
       This key will API key only works on this Stackblitz. To use this code in your own project,
       sign up for an API key on the TomTom Developer Portal.
       */
-      key: "jGLOAW8p4cm75mgVAHfwDjDADWQo4iOs",
+      key: tomtom_api_key,
       container: mapElement.current,
       center: [mapLongitude, mapLatitude],
       zoom: mapZoom,
       language: "en-GB",
     });
+
+    map.addControl(new tt.FullscreenControl());
+    map.addControl(new tt.NavigationControl());
     setMap(map);
+
+    map.on("click", (e) => {
+      const { lng, lat } = e.lngLat;
+      
+      // creating source data with turf.js
+      const sourceID = `circleData ${Math.floor(Math.random() * 10000)}`;
+      let center = turf.point([lng, lat]);
+      let radius = 0.5;
+      let options = {
+        steps: 15,
+        units: "kilometers", // or "mile"
+      };
+      let circle = turf.circle(center, radius, options);
+      map.addSource(sourceID, {
+        type: "geojson",
+        data: circle,
+      });
+
+
+      //fetching and drawing the map
+    
+      
+       
+         
+            map.addLayer({
+              id: `circle ${Math.floor(Math.random() * 10000)}`,
+              type: "fill",
+              source: sourceID,
+              paint: {
+                "fill-color": "yellow",
+                "fill-opacity": 0.6,
+              }
+            })
+       
+    
+    })
     return () => map.remove();
 
    
