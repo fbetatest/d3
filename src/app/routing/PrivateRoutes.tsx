@@ -14,8 +14,8 @@ import {InterviewsWrapper} from "../pages/interviews/interviews"
 import {ChecklistsWrapper} from "../pages/checklists/checklists"
 import {NewChecklistWrapper} from "../pages/checklists/newChecklist"
 
-import {JourneyTimeWrapper} from "../pages/journeytime/journeytime"
-import {CoordinatesWrapper} from "../pages/coordinates/coordinates"
+
+
 import {TicketsraisedWrapper} from "../pages/ticketsraised/ticketsraised"
 import {ChecklistIDWrapper} from "../pages/checklistid/checklistid"
 import {ProjectsIDWrapper} from "../pages/projects/projectsid/projectsid"
@@ -30,6 +30,18 @@ import {GeofencingsWrapper} from "../pages/geofencing/geofencing"
 import {NewGeofencingWrapper} from "../pages/geofencing/newGeofencing"
 import {GeofencingIDWrapper} from "../pages/geofencingid/geofencingid"
 import { GeofencingReportWrapper } from '../pages/geofencingid/geofencingreport'
+
+
+import {JourneyTimeWrapper} from "../pages/journeytime/journeytime"
+import {NewJourneytimeWrapper} from "../pages/journeytime/newJourneytime"
+import {JourneytimeIDWrapper} from "../pages/journeytimeid/journeytimeid"
+import { JourneytimeReportWrapper } from '../pages/journeytimeid/journeytimereport'
+
+
+import {CoordinatesWrapper} from "../pages/coordinates/coordinates"
+import {NewCoordinatesWrapper} from "../pages/coordinates/newCoordinates"
+import {CoordinatesIDWrapper} from "../pages/coordinatesid/coordinatesid"
+import { CoordinatesReportWrapper } from '../pages/coordinatesid/coordinatesreport'
 
 
 const PrivateRoutes = () => {
@@ -51,10 +63,16 @@ const PrivateRoutes = () => {
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />
         <Route path='projects-page' element={<ProjectsWrapper />} />
+
+
         <Route path='new-project' element={<NewProjectWrapper />} />
         <Route path='new-checklist' element={<NewChecklistWrapper />} />
         <Route path='new-interview' element={<NewInterviewWrapper />} />
         <Route path='new-geofencing' element={<NewGeofencingWrapper />} />
+        <Route path='new-journeytime' element={<NewJourneytimeWrapper />} />
+        <Route path='new-coordinates' element={<NewCoordinatesWrapper />} />
+
+
         <Route path='reports-page' element={<ReportWrapper />} />
         <Route path='interviews-page' element={<InterviewsWrapper />} />
         <Route path='checklists-page' element={<ChecklistsWrapper />} />
@@ -62,12 +80,18 @@ const PrivateRoutes = () => {
         <Route path='coordinates-page' element={<CoordinatesWrapper />} />
         <Route path='journeytime-page' element={<JourneyTimeWrapper />} />
         <Route path='ticketsraised-page' element={<TicketsraisedWrapper />} />
+
         <Route path='checklist/:id' element={<ChecklistIDWrapper />} />
         <Route path='interview/:id' element={<InterviewIDWrapper />} />
         <Route path='geofencing/:id' element={<GeofencingIDWrapper />} />
+        <Route path='journeytime/:id' element={<JourneytimeIDWrapper />} />
+        <Route path='coordinates/:id' element={<CoordinatesIDWrapper />} />
         <Route path='checklist-report/:id' element={<ChecklistReportWrapper />} />
         <Route path='interview-report/:id' element={<InterviewReportWrapper />} />
         <Route path='geofencing-report/:id' element={<GeofencingReportWrapper />} />
+        <Route path='journeytime-report/:id' element={<JourneytimeReportWrapper/>} />
+        <Route path='coordinates-report/:id' element={<CoordinatesReportWrapper/>} />
+
         <Route path='project/:id' element={<ProjectsIDWrapper />} />
         {/* Lazy Modules */}
         <Route
