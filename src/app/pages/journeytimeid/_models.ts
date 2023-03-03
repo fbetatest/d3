@@ -3,19 +3,19 @@ import {ID, Response} from '../../../_metronic/helpers'
 
   export type Projects= {
     projectName?: string
-    geofencingName?: string
+    journeytimeName?: string
   }
 
 
   
 
 
-  export type Geofencing= {
+  export type Journeytime= {
     id?: ID
     projectName?: string
-    geofencingName?: string,
+    journeytimeName?: string,
     created?: number
   }
 
   
-export type GeofencingQueryResponse = Response<Array<Geofencing>>
+export type JourneytimeQueryResponse = Response<Array<Journeytime>>

@@ -12,33 +12,33 @@ type Answers = {
 
 
 
-export function saveGeofencingData(geofencingName: string, geofencingVid: Number, projectName: string, answers: Answers[]) {
+export function saveJourneytimeData(journeytimeName: string, journeytimeVid: Number, projectName: string, answers: Answers[]) {
   
   
   const data = {
-    geofencingName,
+    journeytimeName,
     projectName,
-    geofencingVid,
+    journeytimeVid,
     answers
   }
 
 
-  return axios.put(`${SERVER_URL}saveGeofencingData`, data)
+  return axios.put(`${SERVER_URL}saveJourneytimeData`, data)
 
  
 
 }
 
-export function getGeofencingData(vid: number) {
-  const data = axios.get(`${SERVER_URL}getgeofencingdata/${vid}`)
+export function getJourneytimeData(vid: number) {
+  const data = axios.get(`${SERVER_URL}getjourneytimedata/${vid}`)
 
   console.log(data)
   return data
 }
 
-export function getGeofencingByProject(id: String){
+export function getJourneytimeByProject(id: String){
   console.log(id)
-  const data = axios.post(`${SERVER_URL}getgeofencingbyproject`,{"id":id})
+  const data = axios.post(`${SERVER_URL}getjourneytimebyproject`,{"id":id})
 
   
   return data

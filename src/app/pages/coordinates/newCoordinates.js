@@ -18,14 +18,15 @@ import {getProjectNames} from '../projects/core/_requests'
 const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
 
 const NewCoordinates = () => {
-  const navigate = useNavigate()
 
+  const navigate = useNavigate()
+  let n = 1
   const mapElement = useRef();
   const [mapLongitude, setMapLongitude] = useState(55.2708);
   const [mapLatitude, setMapLatitude] = useState(25.2048);
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
-
+  const [cordinates, setCordinates] = useState([])
 
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
@@ -58,41 +59,48 @@ const NewCoordinates = () => {
     map.addControl(new tt.NavigationControl());
     setMap(map);
 
-    map.on("click", (e) => {
-      const { lng, lat } = e.lngLat;
-      
-      // creating source data with turf.js
-      const sourceID = `circleData ${Math.floor(Math.random() * 10000)}`;
-      let center = turf.point([lng, lat]);
-      let radius = 0.5;
-      let options = {
-        steps: 15,
-        units: "kilometers", // or "mile"
-      };
-      let circle = turf.circle(center, radius, options);
-      map.addSource(sourceID, {
-        type: "geojson",
-        data: circle,
-      });
+    const markers = []
 
+    const addCordinateMarker = (lngLat, map) => {
+      const popupOffset = {
+        bottom: [0, -25],
+      }
 
-      //fetching and drawing the map
-    
-      
-       
-         
-            map.addLayer({
-              id: `circle ${Math.floor(Math.random() * 10000)}`,
-              type: "fill",
-              source: sourceID,
-              paint: {
-                "fill-color": "yellow",
-                "fill-opacity": 0.6,
-              }
-            })
-       
-    
+      const popup = new tt.Popup({
+        offset: popupOffset,
+        closeButton: false,
+        closeOnClick: false,
+        autoClose: false,
+      }).setHTML(`<div>
+      <div><strong>Coordinate ${n}</strong></div>
+      <div>Latitude: ${parseFloat(lngLat.lat).toFixed(4)}</div>
+      <div>Logitude: ${parseFloat(lngLat.lng).toFixed(4)}</div>
+      </div>`)
+      const element = document.createElement('div')
+      element.className = 'marker'
+      const marker = new tt.Marker({
+        element: element,
+      })
+        .setLngLat(lngLat)
+        .addTo(map)
+
+      n += 1
+
+      marker.setPopup(popup).togglePopup()
+
+      markers.push(marker)
+    }
+
+    const cTemp = []
+
+    map.on('click', (e) => {
+           const {lng, lat} = e.lngLat
+      cTemp.push({lng, lat})
+      setCordinates([...cTemp])
+      addCordinateMarker(e.lngLat, map)
     })
+
+
     return () => map.remove();
 
    
@@ -163,6 +171,16 @@ const NewCoordinates = () => {
                       Coordinates Map
                     </label>
                     <div ref={mapElement} className="mapDiv" />
+
+                    {(cordinates.length > 0)? <>
+                    {cordinates.map((val, id) => { 
+                      return <div key={id} className="cordinateItem">
+                        <strong>Coordinate {id+1}</strong>{' '}                      
+                        latitude: <strong>{parseFloat(val.lat).toFixed(4)}</strong>{' '}
+                        longitude: <strong>{parseFloat(val.lng).toFixed(4)}</strong>{' '}
+                        </div>
+                    })}
+                    </>:<div className="cordinateItem">Click on the map to create a Coordinate</div>}
 
                     <div className='card-footer'>
                                 <button type='submit' className='btn btn-lg btn-primary'>

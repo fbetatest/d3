@@ -4,3 +4,80 @@
     border-radius: 25px;
     overflow: hidden;
   }
+
+  
+.form {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  font-size: 12px;
+}
+
+.form--borders {
+  border-top: 2px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.form__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.form__row--compact {
+  padding: 5px;
+  font-size: 14px;
+  font-weight:600;
+}
+
+.form__input {
+  border: 1px solid #ddd;
+  display: block;
+  font-family: Noway;
+  font-size: 16px;
+  margin-top: 5px;
+  padding: 5px 8px;
+  width: 100%;
+  color: #707070;
+}
+
+.form__label {
+
+  font-size: 12px;
+ 
+}
+
+.btn-submit,
+.fence-choice input[type="button"].btn-submit {
+  background: #2a6089;
+  border: none;
+  color: #fff;
+  height: 25px;
+  font-family: Gotham Bold, Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+  width: 100%;
+  -ms-flex-item-align: center;
+  align-self: center;
+  font-size: 10px;
+}
+
+.btn-submit--remove {
+  background-color: #d73131;
+  color: #fff;
+  font-size: 8px;
+}
+
+.mapboxgl-popup .mapboxgl-popup-close-button {
+  color: #6b6b6b;
+  font-size: 18px;
+  padding-right: 7px;
+  padding-top: 3px;
+}
