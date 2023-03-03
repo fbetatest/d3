@@ -333,9 +333,9 @@ function drawPolygon(){
       }
     };
 
-   // drawPolygon();
+   drawPolygon();
 
-   drawCircle();
+   //drawCircle();
 
     
 
