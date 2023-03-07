@@ -44,9 +44,10 @@ const GeofencingID= () => {
   const [mapLongitude, setMapLongitude] = useState(55.2708);
   const [mapLatitude, setMapLatitude] = useState(25.2048);
   const [mapZoom, setMapZoom] = useState(13);
+  
   const [map, setMap] = useState({});
 
- 
+
 
   useEffect(() => {
 
@@ -75,6 +76,9 @@ const GeofencingID= () => {
       zoom: mapZoom,
       language: "en-GB",
     });
+
+    map.addControl(new tt.FullscreenControl())
+    map.addControl(new tt.NavigationControl())
     setMap(map);
 
 
