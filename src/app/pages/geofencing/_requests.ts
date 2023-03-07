@@ -9,15 +9,30 @@ type Questions = {
     fieldOptions: string
   }
 
-export function newGeofencing(geofencingName: string, projectName: string, questions: Questions[]) {
+  type PolygonData = {
+    name: string, 
+    id: string, 
+      data: {
+        type: string,
+        coordinates: [[number, number]]
+      }
+  }
+
+export function newGeofencing(
+  geofencingName: string, 
+  projectName: string, 
+  questions: Questions[],
+   polygonData:PolygonData[]) {
     let data = {
       geofencingName,
       projectName,
       questions,
+      polygonData
     }
-  
+    console.log("polygonData")
+   
     console.log(data)
-    console.log(questions)
+ 
   
     return axios.put(`${SERVER_URL}newGeofencing`, data)
   }
