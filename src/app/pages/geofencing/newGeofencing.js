@@ -124,9 +124,18 @@ function drawPolygon(){
         };
         this.setDblClickMapListeners();
         map.on("dblclick", function () {
+
+          console.log(self.geometry.coordinates.length)
+          console.log("db-click")
+          if(self.geometry.coordinates.length>1){
+        
           self.geometry = convertLineStringToPolygon(self.geometry);
           self.redraw(self.geometry);
           self.endDrawing();
+
+          }
+          
+          
         });
       }
       else {
@@ -137,48 +146,11 @@ function drawPolygon(){
    
 
 
-    drawHandler(activeForm, onMouseMove, onStartDrawing);
+    drawHandler(activeForm, onMouseMove, onStartDrawing, isPolygon);
   }
 
 
-  function drawCircle(){
-
-    drawState = "circle";
-    const activeForm = null;
-    const onMouseMove = function (event) {
-      console.log("mousemove runnning")
-      this.geometry.radius = turf.distance(
-        this.geometry.coordinates,
-        [event.lngLat.lng, event.lngLat.lat],
-        { units: "meters" }
-      );
-      const geoJsonData = turf.circle(
-        this.geometry.coordinates,
-        this.geometry.radius,
-        turfOptions
-      );
-      this.redraw(geoJsonData);
-    };
-
-    const onStartDrawing = function (event) {
-      console.log("onStartDrawing")
-      if (drawState !== "cancel") {
-   
-        this.geometry = {
-          type: "Point",
-          shapeType: "Circle",
-          coordinates: [event.lngLat.lng, event.lngLat.lat]
-        };
-        this.setOneClickMapListeners();
-      }
-      else {
-        this.cancelDrawing();
-      }
-    };
-
-    drawHandler(activeForm, onMouseMove, onStartDrawing);
-
-  }
+  
 
   function convertLineStringToPolygon(geometry) {
     geometry.coordinates[geometry.coordinates.length - 1] =
@@ -196,7 +168,7 @@ function drawPolygon(){
         <div class="form">
           <div class="form__row form__row--compact"> ${data.name}</div>
           <div class="form__row form__row--compact">
-            <input type="button" id="${data.id}" class="btn-submit btn-submit--remove" value="Remove">
+            <input type="button" id="remove-${data.id}" class="btn-submit btn-submit--remove" value="Remove">
           </div>
         </div>`
       );
@@ -211,35 +183,44 @@ function drawPolygon(){
           const name = document.getElementById("input-name").value;
           const id= self.polygon.id;
           const data = {name, id}
-       //   self.polygon.closePopup();
-          self.polygon
-          .bindPopup(detailsPopup(data), popupOptions).openPopup()
 
-          if(self.polygon.isPopupOpen){
-            console.log(self.polygon.id)
+         
+          const newPolygon =  new Polygon(self.polygon.data);
+            newPolygon.addTo(map)
+            self.polygon.remove();
+            newPolygon
+            .bindPopup(detailsPopup(data), popupOptions).openPopup()
+            drawPolygon();
+
+          if(newPolygon.isPopupOpen){
+
+
            document
-            .getElementById(`${data.id}`)
+            .getElementById(`remove-${data.id}`)
             .addEventListener("click", function () {
-             console.log(this.id)
+             
 
-             self.polygon.remove();
-          
-            // self.polygon.remove();
+             removeFence(this.id, newPolygon)
+         
             });
+     
           }
-
-        
-          
-
-    
-
-
-          
-
   
         });
+
        
       
+    }
+
+    function removeFence(id, polygon) {
+      polygon.remove();
+
+    }
+
+
+    function displayFence(data) {
+      const polygon = new Polygon(data)
+        .addTo(map)
     }
 
 
@@ -259,9 +240,11 @@ function drawPolygon(){
        map.off("click", this.addVertex);
         map.off("click", this.endDrawing);
         map.off("dblclick", this.finishPolygon);
-        map.on("dblclick", this.finishPolygon);
-        map.on("click", drawnShape.startDrawing);
-        map.on("click", this.addVertex);
+        
+      
+      //  map.on("dblclick", this.finishPolygon);
+
+ 
       
 
        
@@ -275,14 +258,20 @@ function drawPolygon(){
         
       },
       cancelDrawing: function () {
+        console.log("cancel-1")
+
+        const self = this;
+    
         map.off("mousemove", this.onMouseMove);
-        map.off("click", this.startDrawing);
+       map.off("click", this.addVertex);
         map.off("click", this.endDrawing);
-        map.off("click", this.addVertex);
         map.off("dblclick", this.finishPolygon);
         this.polygon && this.polygon.remove();
         drawnShape = null;
         document.onkeydown = null;
+
+
+       
       },
       setOneClickMapListeners: function () {
         map.off("click", this.startDrawing);
@@ -305,6 +294,8 @@ function drawPolygon(){
         ) {
           this.geometry.coordinates.push([event.lngLat.lng, event.lngLat.lat]);
         }
+
+        console.log(this.geometry.coordinates)
       },
       finishPolygon: function () {
         console.log("entered fP")
@@ -326,8 +317,11 @@ function drawPolygon(){
         const self = this;
         document.onkeydown = function (event) {
           if (event.key === "Escape" || event.key === "Esc") {
-            drawState = "cancel";
+      
+            console.log("cancel-2")
             self.cancelDrawing();
+            drawPolygon();
+            
           }
         };
       }
