@@ -46,8 +46,7 @@ const GeofencingID= () => {
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
 
-  map.addControl(new tt.FullscreenControl())
-  map.addControl(new tt.NavigationControl())
+ 
 
   useEffect(() => {
 
