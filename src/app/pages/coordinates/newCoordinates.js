@@ -121,8 +121,8 @@ const NewCoordinates = () => {
                 }}
                 onSubmit={(values) => {
                   console.log(values)
-
-                  newCoordinates(values.coordinatesName, values.projectName, values.questions).then(()=>{
+                  console.log(cordinates)
+                  newCoordinates(values.coordinatesName, values.projectName, values.questions, cordinates).then(()=>{
                   navigate('/coordinates-page');
                   })
                 }}

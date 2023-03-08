@@ -29,6 +29,7 @@ const CoordinatesID= () => {
     created: 0,
     vid: 0,
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
+    coordinatesData: [{lng:0, lat:0}]
   })
 
 
@@ -38,16 +39,12 @@ const CoordinatesID= () => {
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
 
-  
+  let n = 1
 
   useEffect(() => {
 
     console.log('useEffect')
-    getCoordinates(vid).then((val) => {
-      const {data} = val
-      setCoordinatesData(data)
-      console.log(data)
-    })
+  
 
 
     let map = tt.map({
@@ -61,7 +58,58 @@ const CoordinatesID= () => {
       zoom: mapZoom,
       language: "en-GB",
     });
+
+    map.addControl(new tt.FullscreenControl());
+    map.addControl(new tt.NavigationControl());
     setMap(map);
+
+    map.on("load", function(){
+      console.log("map loaded")
+      getCoordinates(vid).then((val) => {
+        const {data} = val
+        setCoordinatesData(data)
+        const {cordinates} = data
+        cordinates.map((v, index) => {
+          displayCordinates(v)
+         });
+      })
+
+    })
+
+    function displayCordinates(v){
+
+      const popupOffset = {
+        bottom: [0, -25],
+      }
+
+      const popup = new tt.Popup({
+        offset: popupOffset,
+        closeButton: false,
+        closeOnClick: false,
+        autoClose: false,
+      }).setHTML(`<div>
+      <div><strong>Coordinate ${n}</strong></div>
+      <div>Latitude: ${parseFloat(v.lat).toFixed(4)}</div>
+      <div>Logitude: ${parseFloat(v.lng).toFixed(4)}</div>
+      </div>`)
+
+      const element = document.createElement('div')
+      element.className = 'marker'
+      const marker = new tt.Marker({
+        element: element,
+      })
+        .setLngLat(v)
+        .addTo(map)
+
+        n += 1
+
+        marker.setPopup(popup).togglePopup()
+    }
+      
+
+
+
+
     return () => map.remove();
   }, []);
 

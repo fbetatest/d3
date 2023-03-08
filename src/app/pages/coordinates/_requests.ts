@@ -9,15 +9,21 @@ type Questions = {
     fieldOptions: string
   }
 
-export function newCoordinates(coordinatesName: string, projectName: string, questions: Questions[]) {
+  type Cordinates = {
+    lng: number
+    lat: number
+  }
+
+export function newCoordinates(coordinatesName: string, projectName: string, questions: Questions[], cordinates: Cordinates[]) {
     let data = {
       coordinatesName,
       projectName,
       questions,
+      cordinates
     }
   
     console.log(data)
-    console.log(questions)
+
   
     return axios.put(`${SERVER_URL}newCoordinates`, data)
   }

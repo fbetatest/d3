@@ -52,15 +52,7 @@ const GeofencingID= () => {
   useEffect(() => {
 
     console.log('useEffect')
-    getGeofencing(vid).then((val) => {
-      const {data} = val
-      setGeofencingData(data)
-      const {polygonData } = data;
-      polygonData.map((v, index) => {
-       displayFence( v.id, v.name, v.data)
-      });
-      console.log(data)
-    })
+   
 
 
 
@@ -80,6 +72,21 @@ const GeofencingID= () => {
     map.addControl(new tt.FullscreenControl())
     map.addControl(new tt.NavigationControl())
     setMap(map);
+
+    map.on("load", function(){
+      console.log("map loaded")
+      getGeofencing(vid).then((val) => {
+        const {data} = val
+        setGeofencingData(data)
+        const {polygonData } = data;
+        polygonData.map((v, index) => {
+         displayFence( v.id, v.name, v.data)
+        });
+        console.log(data)
+      })
+    })
+
+    
 
 
     function uuidv4() {
@@ -102,8 +109,13 @@ const GeofencingID= () => {
       console.log("displayFence")
       console.log(name)
 
-      const newPolygon = new Polygon(polygon)
-     newPolygon.addTo(map)
+      const newPolygon = new Polygon(polygon).addTo(map)
+      if(newPolygon.data.coordinates[0][0]){
+      map.setCenter(newPolygon.data.coordinates[0][0])
+      }
+
+      console.log()
+   
       
       newPolygon.bindPopup(detailsPopup({id, name}), popupOptions).openPopup()
   
