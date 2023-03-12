@@ -28,6 +28,8 @@ const InterviewID: FC = () => {
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
   })
 
+
+
   useEffect(() => {
     console.log('useEffect')
     getInterview(vid).then((val) => {
@@ -122,7 +124,7 @@ const InterviewID: FC = () => {
                                     )}
                                     {val.fieldType == 'checkbox' ? (
                                       <div role='group' aria-labelledby='checkbox-group'>
-                                        {val.fieldOptions.split(',').map((option, i) => {
+                                        {val.fieldOptions.split('#').map((option, i) => {
                                           return  <label key={i}
                                           className='form-check form-check-sm form-check-custom form-check-solid me-5 ms-2 mb-3'>
                                           <Field type="checkbox" 

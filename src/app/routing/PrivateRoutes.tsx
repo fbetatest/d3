@@ -23,6 +23,7 @@ import { ChecklistReportWrapper } from '../pages/checklistid/checklistreport'
 
 import {NewInterviewWrapper} from "../pages/interviews/newInterview"
 import {InterviewIDWrapper} from "../pages/interviewid/interviewid"
+import {EditInterviewWrapper} from "../pages/interviews/editinterview"
 import { InterviewReportWrapper } from '../pages/interviewid/interviewreport'
 
 
@@ -68,6 +69,7 @@ const PrivateRoutes = () => {
         <Route path='new-project' element={<NewProjectWrapper />} />
         <Route path='new-checklist' element={<NewChecklistWrapper />} />
         <Route path='new-interview' element={<NewInterviewWrapper />} />
+        <Route path='edit-interview/:id' element={<EditInterviewWrapper />} />
         <Route path='new-geofencing' element={<NewGeofencingWrapper />} />
         <Route path='new-journeytime' element={<NewJourneytimeWrapper />} />
         <Route path='new-coordinates' element={<NewCoordinatesWrapper />} />

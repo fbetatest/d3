@@ -88,34 +88,48 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                         </div>
                       </div>
                     </td>
-                    <td>
-                      <span className='badge badge-light-primary fs-7 fw-semibold'>
+                    <td className="mw-150px">
+                      <span className='badge-light-primary fs-7 fw-semibold'>
                         {' '}
                         {val.projectName}
                       </span>
                     </td>
 
-                    <td>
-                      <a
-                        href='#'
-                        className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
+                    <td className="mw-100px">
+                      <span
+                       
+                        className='text-dark fw-bold d-block mb-1 fs-6'
                       >
                         {val.created ? new Date(val.created).toDateString() : ' '}
-                      </a>
+                      </span>
                     </td>
 
                     <td className='text-end'>
+                    <Link to={'../edit-interview/' + val.created}>
+                    <button
+                      //edit button
+                  
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1'
+                      >
+                        <KTSVG
+                          path='/media/icons/duotune/general/gen055.svg'
+                          className='svg-icon-3'
+                        />
+                      </button>
+                      </Link>
                     
                       <button
                         onClick = { () => {deleteInterview(val.created); setInterviewData(interviewData.filter(item => item.created !== val.created))} }
                   
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                       >
                         <KTSVG
                           path='/media/icons/duotune/general/gen027.svg'
                           className='svg-icon-3'
                         />
                       </button>
+
+                     
                     </td>
                   </tr>
                 )

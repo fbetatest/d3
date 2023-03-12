@@ -27,6 +27,20 @@ export function newInterview(interviewName: string, projectName: string, questio
   return axios.put(`${SERVER_URL}newInterview`, data)
 }
 
+export function editInterview(interviewName: string, projectName: string, questions: Questions[], vid: number) {
+  let data = {
+    interviewName,
+    projectName,
+    questions,
+    vid
+  }
+
+  console.log(data)
+  console.log(questions)
+
+  return axios.put(`${SERVER_URL}editInterview`, data)
+}
+
 export function deleteInterview(vid: number) {
   console.log(vid)
   return axios.delete(`${SERVER_URL}deleteinterview/${vid}`)

@@ -76,7 +76,7 @@ return(<>
                 <thead>
               <tr className='fw-bold text-muted bg-light'>
                 <th className='ps-4 rounded-start '>No.</th>
-                <th className=''>Project Name</th>
+                <th className='mw-350px'>Project Name</th>
                 <th className=''>Description</th>
                 <th className=''>Surveyors</th>
                 <th className=''>Tasks</th>
@@ -96,7 +96,7 @@ return(<>
                     <td>
                       <div className='ps-4'>{id + 1}</div>
                     </td>
-                    <td>
+                    <td className='mw-350px'>
                       <div className='d-flex align-items-center'>
                         <div className='d-flex justify-content-start flex-column'>
                           <Link

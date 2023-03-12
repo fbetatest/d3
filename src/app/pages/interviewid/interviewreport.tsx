@@ -7,7 +7,7 @@ import {getInterview} from '../interviews/_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 import {useNavigate} from 'react-router-dom'
 import {Formik, Form, Field, FieldArray} from 'formik'
-import {getInterviewData, saveInterviewData} from './_requests'
+import {deleteInterviewData, getInterviewData, saveInterviewData} from './_requests'
 
 const InterviewReport: FC = () => {
   const {id} = useParams()
@@ -26,54 +26,40 @@ const InterviewReport: FC = () => {
     vid: 0,
   })
 
-  type Answers = {
-    question?: string
-    fieldValue?: string
-    fieldOptions: string[]
-  }
 
-  const [answersData, setAnswersData] = useState<[Answers]>([
-    {
+
+  const [interviewData2, setInterviewData2] = useState([{
+    _id: '',
+    interviewName: 'Loading..',
+    projectName: '',
+    created: 0,
+    vid: 0,
+    answers: [{
       question: '',
-      fieldValue: '',
-      fieldOptions: [],
-    },
-  ])
+      fieldValue:'',
+      fieldOptions: []
+    }]
+  }])
 
-  const [datalength, setDatalength] = useState(0)
+
+
+
 
   useEffect(() => {
     console.log('useEffect')
 
     getInterviewData(vid).then((val) => {
       const {data} = val
+
       if(data.length){
+
+        setInterviewData2(data)
+        console.log(interviewData2)
 
       console.log(data)
       setInterviewData(data[0])
-      console.log(interviewData)
-      let tempAnswersData: [Answers] = [
-        {
-          question: '',
-          fieldValue: '',
-          fieldOptions: [],
-        },
-      ]
-      let i = 0
+     
 
-      data.map((v: any) => {
-        tempAnswersData.push(v.answers)
-      })
-
-      tempAnswersData.shift()
-
-      console.log(tempAnswersData)
-
-      setAnswersData(tempAnswersData)
-
-      const dl = data[0].answers.length
-      console.log(dl)
-      setDatalength(dl)
 
     }
 
@@ -111,41 +97,39 @@ const InterviewReport: FC = () => {
           
         </div>
       </div>
-              {answersData.map((val1, id) => {
-               
-                return (
-                  <>
-                    <div key={id} className='fw-semibold fs-5 my-0 py-2 border border-gray-300 p-4 my-2 rounded '>
-                      {Object.values(val1).map((value, index) => {
-                  
-                        return (
-                          <div className="pb-2">
-                            {}
-                            <div>
-                              {Object.values(value).map((val, index) => {
-                                return (
-                                  <>
-                                    {val.length ? (
-                                      <>
-                                        {index == 0 ? <span>{val} : </span> : ''}
-                                        {index == 1 ? <span>{val} </span> : ''}
-                                        {index == 2 ? <span>{val.toString()} </span> : ''}
-                                        {index == 3 ? '' : ''}
-                                      </>
-                                    ) : (
-                                      ''
-                                    )}
-                                  </>
-                                )
-                              })}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </>
-                )
-              })}
+
+      {interviewData2.map((val1, id)=>{
+        return (
+          <>
+          <div key={id} className='fw-semibold fs-5 my-0 py-2 border border-gray-300 p-4 my-2 rounded '>
+            <div className='flex-stack d-flex'>
+              <div></div>
+              <div className='d-flex flex-stack'>
+              <div className='text-muted pe-3'>Created: {new Date(val1.created).toDateString()} </div>
+           
+            <button 
+            onClick = { () => {  deleteInterviewData(val1._id);  setInterviewData2(interviewData2.filter(item => item._id !== val1._id))} }
+            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm align-self-end' >
+              <KTSVG path='/media/icons/duotune/general/gen027.svg' className='svg-icon-3' />
+            </button>
+            </div>
+            </div>
+          {val1.answers.map((val, i)=>{ 
+            return (
+            <div key={i} className="pb-2">
+              
+              {(val.question)?<span>{`${val.question} `}</span>:''}
+              {(val.fieldValue)?<span className="fw-bold text-primary">{val.fieldValue}</span>:''}
+              {(val.fieldOptions)?<span className="fw-bold text-primary">{val.fieldOptions.toString()}</span>:''}
+          
+            </div>
+            
+          )})}
+          </div>
+          </>
+        )
+      })}
+              
             </div>
           </div>
         </div>
@@ -164,160 +148,3 @@ const InterviewReportWrapper: FC = () => {
 
 export {InterviewReportWrapper}
 
-/*
-
-
-import {PageTitle} from '../../../_metronic/layout/core'
-import {useParams} from 'react-router-dom'
-import {FC} from 'react'
-import {useFormik} from 'formik'
-import {useState, useEffect} from 'react'
-import {getInterview} from '../interviews/_requests'
-import {KTSVG} from '../../../_metronic/helpers'
-import {useNavigate} from 'react-router-dom'
-import {Formik, Form, Field, FieldArray} from 'formik'
-import { getInterviewData, saveInterviewData } from './_requests'
-
-const InterviewReport: FC = () => {
-  const {id} = useParams()
-  console.log(id)
-
-  let tempId = '0'
-  if (id) tempId = id
-  console.log(id)
-  const vid: number = +tempId
-
-  const [interviewData, setInterviewData] = useState({
-    id: 0,
-    interviewName: 'Loading..',
-    projectName: '',
-    created: 0,
-    vid: 0,
-  })
-
-  type Answers = {
-    question?: string
-    fieldValue?: string
-    fieldOptions: string[]
-  }
-
-  const [answersData, setAnswersData]= useState<[Answers]>([{
-    question: "",
-    fieldValue: "",
-    fieldOptions: []
-}])
-
-  const [datalength, setDatalength]= useState(0);
-
-  useEffect(() => {
-    console.log('useEffect')
-    
-
-    getInterviewData(vid).then((val)=> {
-        const {data} = val
-
-        console.log(data)
-        setInterviewData(data[0])
-        console.log(interviewData)
-        let tempAnswersData: [Answers] = [{
-            question: "",
-            fieldValue: "",
-            fieldOptions: []
-        }]
-        let i=0;
-
-       
-        data.map((v: any)=>{
-
-      
-            tempAnswersData.push(v.answers)
-       
-
-        })
-
-        tempAnswersData.shift();
-        
-
-        console.log(tempAnswersData)
-       
-        setAnswersData(tempAnswersData)
-      
-const dl= data[0].answers.length;
-console.log(dl)
-       setDatalength(dl)
-        
-     
-      });
-  }, [])
-
-  
-
-  return (
-    <>
-      <PageTitle breadcrumbs={[]}>{interviewData.interviewName}</PageTitle>
-      <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-800px'>
-        <div className='card-body py-3 pt-3 pb-3'>
-          <div className='row g-5 gx-xxl-12'>
-            <div className='col-xxl-12'>
-
-
-
-
-
-
-
-
-     { answersData.map((val1,id)=>{
-           return <>
-          
-           <div key={id} className="fw-semibold fs-5 my-0 py-2 ">
-            {Object.values(val1).map((value, index) => {
- return <div>
-{ }
-  <div>
-{Object.values(value).map((val, index) => {
-return <>
-{(val.length)?<>
-{(index==0)?<span>{val} : </span>: ""}
-{(index==1)?<span>{val}  </span>: ""}
-{(index==2)?<span>{val.toString()}  </span>: ""}
-{(index==3)?"" : ""}
-</>:""}
-</>
-
-})}
-</div>
-
-            </div> })
-
-            }
-          
-            </div>
-
-            </>
-
-            })}
-
-</div>
-</div>
-</div>
-</div>
-
-      
-      
-    </>
-  )
-}
-
-const InterviewReportWrapper: FC = () => {
-  return (
-    <>
-      <InterviewReport />
-    </>
-  )
-}
-
-export {InterviewReportWrapper}
-
-
-*/

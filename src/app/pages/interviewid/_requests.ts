@@ -29,6 +29,10 @@ export function saveInterviewData(interviewName: string, interviewVid: Number, p
 
 }
 
+export function deleteInterviewData(id: string){
+  return axios.delete(`${SERVER_URL}deleteInterviewdata/${id}`)
+}
+
 export function getInterviewData(vid: number) {
   const data = axios.get(`${SERVER_URL}getinterviewdata/${vid}`)
 

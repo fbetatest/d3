@@ -4,16 +4,37 @@ import {FC} from 'react'
 
 import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {newInterview} from './_requests'
+import {editInterview, getInterview} from './_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 
 import {Formik, Form, Field, FieldArray} from 'formik'
 import {getProjectNames} from '../projects/core/_requests'
 
-const NewInterview: FC = () => {
+
+const EditInterview: FC = () => {
   const navigate = useNavigate()
+  const {id} = useParams()
+  console.log(id)
+
+  let tempId = '0'
+  if (id) tempId = id
+  console.log(id)
+  const vid: number = +tempId
 
   const [projectsList, setProjectsList] = useState(['Loading..'])
+
+ 
+
+  const [interviewData, setInterviewData] = useState({
+    id: '',
+    interviewName: 'Loading Data...',
+    projectName: '',
+    created: 0,
+    vid: 0,
+    questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
+  })
+
+
 
   useEffect(() => {
     getProjectNames().then((val) => {
@@ -21,28 +42,52 @@ const NewInterview: FC = () => {
 
       setProjectsList(data)
     })
+
+    let tempQuestions : any=[];
+
+
+    getInterview(vid).then((val) => {
+      const {data} = val
+      
+     data.questions.map((val2 : any)=>{
+      tempQuestions.push({fieldName: val2.fieldName, fieldType: val2.fieldType, fieldOptions: val2.fieldOptions})
+     })
+
+     setInterviewData({
+      id: data._id,
+      interviewName: data.interviewName,
+      projectName: data.projectName,
+      created: data.created,
+      vid: data.vid,
+      questions: tempQuestions,
+    })
+
+
+      console.log(interviewData)
+    })
   }, [])
 
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Create New Interview</PageTitle>
+      <PageTitle breadcrumbs={[]}>Edit Interview</PageTitle>
 
       <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-800px'>
         <div className='card-body py-3 pt-3 pb-3'>
           <div className='row g-5 gx-xxl-12'>
             <div className='col-xxl-12'>
-              <Formik
+
+              {(interviewData.interviewName!="Loading Data...")?<Formik
                 initialValues={{
-                  interviewName: '',
-                  projectName: '',
-                  questions: [{fieldName: '', fieldType: 'text', fieldOptions:""}],
+                  interviewName: interviewData.interviewName,
+                  projectName:  interviewData.projectName,
+                  questions: interviewData.questions,
                 }}
                 onSubmit={(values) => {
                   console.log(values)
 
-                  newInterview(values.interviewName, values.projectName, values.questions).then(()=>{
-                  navigate('/interviews-page');
-                  })
+                  editInterview(values.interviewName, values.projectName, values.questions, interviewData.vid ).then(()=>{
+                 navigate('/interviews-page');
+                 })
                 }}
               >
                 {(formik) => (
@@ -71,13 +116,21 @@ const NewInterview: FC = () => {
                             className='d-flex align-items-center justify-content-between cursor-pointer  '
                           >
                             <label className='form-check form-check-sm form-check-custom form-check-solid me-5 mb-3'>
-                              <input
+                              {interviewData.projectName==name?<input
                                 type='radio'
                                 name='projectName'
                                 value={name}
                                 className='form-check-input me-1'
-                                onChange={formik.handleChange}
-                              />
+                                onChange={formik.handleChange}    
+                                checked                     
+                              />:<input
+                                type='radio'
+                                name='projectName'
+                                value={name}
+                                className='form-check-input me-1'
+                                onChange={formik.handleChange}                         
+                              />}
+                              
                               {name}
                             </label>
                           </label>
@@ -98,7 +151,7 @@ const NewInterview: FC = () => {
                                 return (
                                   <div
                                     key={index}
-                                    className='border border-gray-100 p-4 my-2 rounded'
+                                    className='border border-gray-200 p-4 my-2 rounded'
                                   >
                                     <div className='float-end'>
                                       <button
@@ -174,7 +227,7 @@ const NewInterview: FC = () => {
                               <div className='card-footer'>
                                 <button type='submit' className='btn btn-lg btn-primary'>
                                   {' '}
-                                  Create Interview{' '}
+                                  Save{' '}
                                   <KTSVG
                                     path='/media/icons/duotune/arrows/arr064.svg'
                                     className='svg-icon-3 ms-2 me-0'
@@ -188,7 +241,11 @@ const NewInterview: FC = () => {
                     </div>
                   </Form>
                 )}
-              </Formik>
+              </Formik>:'Loading..'}
+              
+
+
+
             </div>
           </div>
         </div>
@@ -197,12 +254,12 @@ const NewInterview: FC = () => {
   )
 }
 
-const NewInterviewWrapper: FC = () => {
+const EditInterviewWrapper: FC = () => {
   return (
     <>
-      <NewInterview />
+      <EditInterview />
     </>
   )
 }
 
-export {NewInterviewWrapper}
+export {EditInterviewWrapper}
