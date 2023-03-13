@@ -17,18 +17,8 @@ const ToolbarClassic = () => {
 
    
 
-      {config.app?.toolbar?.primaryButton && (
-        
-        <Link to={"../new-project"}
-       
-          className='btn btn-sm fw-bold btn-primary'
-       
-         
-        >
-          Create New Project
-        </Link>
-      )}
-      <CreateAppModal show={showCreateAppModal} handleClose={() => setShowCreateAppModal(false)} />
+     
+      
     </div>
   )
 }

@@ -114,7 +114,7 @@ const InterviewReport: FC = () => {
   return (
     <>
       <PageTitle breadcrumbs={[]}>Report</PageTitle>
-      <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-800px'>
+      <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-1200px'>
         <div className='card-body py-3 pt-3 pb-3 report'>
           <div className='row g-5 gx-xxl-12'>
             <div className='col-xxl-12'>

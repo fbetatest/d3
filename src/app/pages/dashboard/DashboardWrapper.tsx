@@ -51,13 +51,14 @@ return(<>
         </h3>
         <div className='card-toolbar'>
           {/* begin::Menu */}
-          <button
-            type='button'
-            className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
-  
-          >
-            <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
-          </button>
+          <Link to={"../new-project"}
+       
+          className='btn btn-sm fw-bold btn-primary'
+       
+         
+        >
+          Create New Project
+        </Link>
       
           {/* end::Menu */}
         </div>
