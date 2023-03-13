@@ -3,7 +3,7 @@ import {KTSVG} from '../../../_metronic/helpers'
 import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import {FC} from 'react'
-import { deleteInterview, getAllInterview} from './_requests'
+import { deleteInterview, duplicateInterview, getAllInterview} from './_requests'
 
 type Props = {
   className: string
@@ -11,7 +11,7 @@ type Props = {
 
 const TablesWidget11: React.FC<Props> = ({className}) => {
   const [interviewData, setInterviewData] = useState([
-    {id: 0, interviewName: 'Loading..', projectName: '', created: 0},
+    {id: 0, interviewName: 'Loading..', projectName: '', created: 0, vid:0},
   ])
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                       <div className='d-flex align-items-center'>
                         <div className='d-flex justify-content-start flex-column'>
                           <Link
-                            to={'../interview/' + val.created}
+                            to={'../interview/' + val.vid}
                             className='text-dark fw-bold text-hover-primary mb-1 fs-6'
                           >
                             {val.interviewName}
@@ -105,11 +105,33 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     </td>
 
                     <td className='text-end'>
-                    <Link to={'../edit-interview/' + val.created}>
+
+                    <button
+                      //duplicate button
+                      onClick = { () => {  
+                        
+                        const iTemp=interviewData.filter(item => item.vid == val.vid)[0];
+                        const created = Date.now();
+                          duplicateInterview( iTemp.vid, created)
+                        const newInterview = {id: 0, 
+                          interviewName: iTemp.interviewName, 
+                          projectName: iTemp.projectName, created: created, vid:created}
+
+                        
+                        console.log(iTemp);setInterviewData([...interviewData, newInterview]) } }
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1 ms-3'
+                      >
+                        <KTSVG
+                          path='/media/icons/duotune/arrows/arr013.svg'
+                          className='svg-icon-3'
+                          
+                        />
+                      </button>
+                    <Link to={'../edit-interview/' + val.vid}>
                     <button
                       //edit button
                   
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1'
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1 ms-3'
                       >
                         <KTSVG
                           path='/media/icons/duotune/general/gen055.svg'
@@ -119,7 +141,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                       </Link>
                     
                       <button
-                        onClick = { () => {deleteInterview(val.created); setInterviewData(interviewData.filter(item => item.created !== val.created))} }
+                        onClick = { () => {deleteInterview(val.vid); setInterviewData(interviewData.filter(item => item.vid !== val.vid))} }
                   
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                       >

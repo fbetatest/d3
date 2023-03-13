@@ -41,6 +41,15 @@ export function editInterview(interviewName: string, projectName: string, questi
   return axios.put(`${SERVER_URL}editInterview`, data)
 }
 
+export function duplicateInterview(vid: number, created: number){
+const data ={
+  vid,
+  created
+}
+console.log(data)
+return axios.put(`${SERVER_URL}duplicateinterview`, data)
+}
+
 export function deleteInterview(vid: number) {
   console.log(vid)
   return axios.delete(`${SERVER_URL}deleteinterview/${vid}`)
