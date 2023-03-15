@@ -187,8 +187,8 @@ const NewCoordinates = () => {
                       Coordinates Map
                     </label>
                       <div className="mb-3">
-                    <button className="btn btn-lg btn-primary ms-3">Add Coordinate</button>
-                    <button className="btn btn-lg btn-primary ms-3">Add Current Location</button>
+                    <button className="btn btn-lg btn-primary ms-3 mb-2">Add Coordinate</button>
+                    <button className="btn btn-lg btn-primary ms-3 mb-2">Add Current Location</button>
                     </div>
 
                     <div>
