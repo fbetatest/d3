@@ -32,6 +32,20 @@ const NewCoordinates = () => {
       userDecisionTimeout: 5000,
   });
 
+
+  const addMarkerToLocation = ()=>{
+   
+    console.log(coords);
+
+    const element2 = document.createElement('div')
+    element2.className = 'marker'
+    const marker2 = new tt.Marker({
+      element: element2,
+    }).setLngLat({lng: coords.longitude , lat: coords.latitude})
+    .addTo(map)
+  
+  }
+
   const navigate = useNavigate()
   let n = 1
   const mapElement = useRef();
@@ -78,6 +92,8 @@ const NewCoordinates = () => {
     const markers = []
 
     const addCordinateMarker = (lngLat, map) => {
+
+      console.log(coords)
       const popupOffset = {
         bottom: [0, -25],
       }
@@ -94,11 +110,14 @@ const NewCoordinates = () => {
       </div>`)
       const element = document.createElement('div')
       element.className = 'marker'
+
       const marker = new tt.Marker({
         element: element,
       })
         .setLngLat(lngLat)
         .addTo(map)
+        
+     
 
       n += 1
 
@@ -121,6 +140,8 @@ const NewCoordinates = () => {
 
    
   }, [])
+
+
   return (
     <>
       <PageTitle breadcrumbs={[]}>Create New Coordinates</PageTitle>
@@ -187,38 +208,24 @@ const NewCoordinates = () => {
                       Coordinates Map
                     </label>
                       <div className="mb-3">
-                    <button className="btn btn-lg btn-primary ms-3 mb-2">Add Coordinate</button>
-                    <button className="btn btn-lg btn-primary ms-3 mb-2">Add Current Location</button>
-                    </div>
-
-                    <div>
-
+                    <button className="btn btn-lg btn-primary ms-3 mb-2" onClick={addMarkerToLocation}>Add Coordinate</button>
+                    <span>
                       {
                         !isGeolocationAvailable ? (
                           <div>Your browser does not support Geolocation</div>
                       ) : !isGeolocationEnabled ? (
                           <div>Geolocation is not enabled</div>
                       ) : coords ? (
-                          <table>
-                              <tbody>
-                                  <tr>
-                                      <td>latitude</td>
-                                      <td>{coords.latitude}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>longitude</td>
-                                      <td>{coords.longitude}</td>
-                                  </tr>
-                                  {addCordinateMarker({longitude: coords.longitude, latitude: coords.latitude }, map)}
-
-                              </tbody>
-                          </table>
+                        <button className="btn btn-lg btn-primary ms-3 mb-2">Add Current Location</button>
                       ) : (
                           <div>Getting the location data&hellip; </div>
                       )
-                  }
-                      
+                  }                      
+                    </span>
+                   
                     </div>
+
+                   
 
 
                     <div ref={mapElement} className="mapDiv" />
