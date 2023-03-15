@@ -27,7 +27,7 @@ const NewCoordinates = () => {
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
   useGeolocated({
       positionOptions: {
-          enableHighAccuracy: false,
+          enableHighAccuracy: true,
       },
       userDecisionTimeout: 5000,
   });
@@ -209,18 +209,8 @@ const NewCoordinates = () => {
                                       <td>longitude</td>
                                       <td>{coords.longitude}</td>
                                   </tr>
-                                  <tr>
-                                      <td>altitude</td>
-                                      <td>{coords.altitude}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>heading</td>
-                                      <td>{coords.heading}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>speed</td>
-                                      <td>{coords.speed}</td>
-                                  </tr>
+                                  {addCordinateMarker({longitude: coords.longitude, latitude: coords.latitude }, map)}
+
                               </tbody>
                           </table>
                       ) : (
