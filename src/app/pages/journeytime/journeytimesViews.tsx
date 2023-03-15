@@ -88,8 +88,8 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                         </div>
                       </div>
                     </td>
-                    <td>
-                      <span className='badge badge-light-primary fs-7 fw-semibold'>
+                    <td className='mw-150px'>
+                      <span className='badge-light-primary fs-7 fw-semibold'>
                         {' '}
                         {val.projectName}
                       </span>

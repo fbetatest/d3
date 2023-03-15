@@ -315,7 +315,7 @@ const GeofencingID= () => {
       <PageTitle breadcrumbs={[]}>{geofencingData.geofencingName}</PageTitle>
       <div className='fw-semibold fs-6 mb-2'>Project: {geofencingData.projectName}</div>
 
-      <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-900px'>
+      <div className='card card-xxl-stretch mb-5 mb-xxl-8'>
         <div className='card-body py-3'>
           <div className='row g-5 gx-xxl-12'>
           <div className='col-xxl-12'>
