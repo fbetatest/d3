@@ -29,8 +29,10 @@ const CoordinatesID= () => {
     created: 0,
     vid: 0,
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
-    coordinatesData: [{lng:0, lat:0, name: ''}]
+    coordinates: [{lng:0, lat:0, name: ''}]
   })
+
+  const [cordinates, setCordinates] = useState([]);
 
 
   const mapElement = useRef();
@@ -39,7 +41,7 @@ const CoordinatesID= () => {
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
 
-  let n = 1
+  
 
   useEffect(() => {
 
@@ -55,7 +57,7 @@ const CoordinatesID= () => {
       key: "jGLOAW8p4cm75mgVAHfwDjDADWQo4iOs",
       container: mapElement.current,
       center: [mapLongitude, mapLatitude],
-      zoom: mapZoom,
+      zoom: 12,
       language: "en-GB",
     });
 
@@ -68,8 +70,9 @@ const CoordinatesID= () => {
       getCoordinates(vid).then((val) => {
         const {data} = val
         setCoordinatesData(data)
-        const {cordinates} = data
-        cordinates.map((v, index) => {
+
+        setCordinates(data.cordinates)
+        data.cordinates.map((v, index) => {
           displayCordinates(v)
          });
       })
@@ -81,6 +84,8 @@ const CoordinatesID= () => {
       const popupOffset = {
         bottom: [0, -25],
       }
+
+      map.setCenter({lng: v.lng , lat: v.lat})
 
       const popup = new tt.Popup({
         offset: popupOffset,
@@ -125,7 +130,17 @@ const CoordinatesID= () => {
         <div className='card-body py-3'>
           <div className='row g-5 gx-xxl-12'>
           <div className='col-xxl-12'>
-          <div ref={mapElement} className="mapDiv" />
+          <div ref={mapElement} className="mapDiv" />       
+          </div>
+
+          <div>
+          {cordinates.map((val, id) => { 
+                      return <div key={id} className="cordinateItem">
+                        <strong> {val.name}</strong>{' '}                      
+                        latitude: <strong>{parseFloat(val.lat).toFixed(4)}</strong>{' '}
+                        longitude: <strong>{parseFloat(val.lng).toFixed(4)}</strong>{' '}
+                        </div>
+                    })}
           </div>
           </div>
         </div>
