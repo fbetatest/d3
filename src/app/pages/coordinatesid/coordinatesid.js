@@ -29,7 +29,7 @@ const CoordinatesID= () => {
     created: 0,
     vid: 0,
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
-    coordinatesData: [{lng:0, lat:0}]
+    coordinatesData: [{lng:0, lat:0, name: ''}]
   })
 
 
@@ -88,7 +88,7 @@ const CoordinatesID= () => {
         closeOnClick: false,
         autoClose: false,
       }).setHTML(`<div>
-      <div><strong>Coordinate ${n}</strong></div>
+      <div><strong> ${v.name}</strong></div>
       <div>Latitude: ${parseFloat(v.lat).toFixed(4)}</div>
       <div>Logitude: ${parseFloat(v.lng).toFixed(4)}</div>
       </div>`)
@@ -101,7 +101,7 @@ const CoordinatesID= () => {
         .setLngLat(v)
         .addTo(map)
 
-        n += 1
+      
 
         marker.setPopup(popup).togglePopup()
     }
@@ -121,7 +121,7 @@ const CoordinatesID= () => {
       <PageTitle breadcrumbs={[]}>{coordinatesData.coordinatesName}</PageTitle>
       <div className='fw-semibold fs-6 mb-2'>Project: {coordinatesData.projectName}</div>
 
-      <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-900px'>
+      <div className='card card-xxl-stretch mb-5 mb-xxl-8'>
         <div className='card-body py-3'>
           <div className='row g-5 gx-xxl-12'>
           <div className='col-xxl-12'>

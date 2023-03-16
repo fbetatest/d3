@@ -10,6 +10,7 @@ type Questions = {
   }
 
   type Cordinates = {
+    name: string
     lng: number
     lat: number
   }

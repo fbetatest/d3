@@ -33,21 +33,9 @@ const NewCoordinates = () => {
   });
 
 
-  const addMarkerToLocation = ()=>{
-   
-    console.log(coords);
 
-    const element2 = document.createElement('div')
-    element2.className = 'marker'
-    const marker2 = new tt.Marker({
-      element: element2,
-    }).setLngLat({lng: coords.longitude , lat: coords.latitude})
-    .addTo(map)
-  
-  }
 
   const navigate = useNavigate()
-  let n = 1
   const mapElement = useRef();
   const [mapLongitude, setMapLongitude] = useState(55.2708);
   const [mapLatitude, setMapLatitude] = useState(25.2048);
@@ -57,6 +45,154 @@ const NewCoordinates = () => {
 
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
+
+  const addMarkerToLocation = ()=>{
+   
+    console.log(coords);
+
+    addCordinateMarker({lng: coords.longitude , lat: coords.latitude}, map)
+
+    map.setCenter({lng: coords.longitude , lat: coords.latitude})
+  
+  }
+
+
+
+  
+
+  const popupOptions = {
+    maxWidth: '200px',
+    offset: {bottom: [0, -25]},
+    closeButton: false,
+    closeOnClick: false,
+    autoClose: false,
+  }
+
+  
+
+  const addCordinateMarker = (lngLat, map) => {
+
+    const id= uuidv4()
+    const popup = new tt.Popup(
+     popupOptions,
+    ).setHTML(inputPopup(id))
+
+    
+    const element = document.createElement('div')
+    element.className = 'marker'
+
+    const marker = new tt.Marker({
+      element: element,
+    })
+      .setLngLat(lngLat)
+      .addTo(map)
+      
+   
+
+
+    marker.setPopup(popup).togglePopup();
+
+    document.getElementById(`save-button-${id}`).addEventListener('click', function () {
+      const name = document.getElementById(`input-name-${id}`).value;
+      console.log(name)
+
+      const markerData ={
+        marker: marker,
+        lng: lngLat.lng,
+        lat: lngLat.lat,
+        id: id,
+        name: name
+      }
+
+      
+       onMarkerSave(markerData);
+    })
+
+    document.getElementById(`remove-button-${id}`).addEventListener('click', function () {
+    
+      marker.remove();
+    })
+
+  }
+  let cTemp=[];
+
+  const onMarkerSave = (markerData) =>{
+console.log(markerData)
+
+    const popup = new tt.Popup(
+      popupOptions,
+     ).setHTML(detailsPopup(
+      markerData.lng.toFixed(4),
+      markerData.lat.toFixed(4),
+      markerData.name,
+      markerData.id))
+      markerData.marker.setPopup(popup).togglePopup();
+
+      cTemp.push({id: markerData.id, name: markerData.name, lng:markerData.lng, lat: markerData.lat})
+
+      console.log(cTemp)
+
+      setCordinates([...cTemp])
+
+console.log(cordinates.length)
+    document.getElementById(`remove-${markerData.id}`).addEventListener('click', function () {
+      markerData.marker.remove();
+   
+     cTemp = cTemp.filter(item=> item.id != markerData.id)
+     setCordinates([...cTemp])
+   
+
+    })
+
+   
+
+  }
+
+ const inputPopup = (id) =>{ 
+    return `<div class="form">
+    <div class="form__row form__row--compact">
+      <label class="form__label">Name 
+        <input type="text" id="input-name-${id}" class="form__input">
+      </label>
+    </div>
+   
+    <div class="form__row form__row--compact">
+      <input type="button" id="save-button-${id}" class="btn-submit btn-submit--save" value="Save">
+    </div>
+    <div class="form__row form__row--compact">
+    <input type="button" id="remove-button-${id}" class="btn-submit btn-submit--remove" value="Remove">
+  </div>
+  </div>`
+
+}
+
+  function detailsPopup(lng, lat, name, id) {
+    return `
+      <div class="form">
+
+      <div><strong> ${name}</strong></div>
+      <div>Latitude: ${parseFloat(lat).toFixed(4)}</div>
+      <div>Logitude: ${parseFloat(lng).toFixed(4)}</div>
+
+       
+        <div class="form__row form__row--compact">
+          <input type="button" id="remove-${id}" class="btn-submit btn-submit--remove" value="Remove">
+        </div>
+      </div>`
+  }
+
+  function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (Math.random() * 16) | 0,
+        v = c == 'x' ? r : (r & 0x3) | 0x8
+      return v.toString(16)
+    })
+  }
+
+
+
+
+
   useEffect(() => {
 
     getProjectNames().then((val) => {
@@ -64,6 +200,9 @@ const NewCoordinates = () => {
 
       setProjectsList(data)
     })
+
+
+
 
 
     console.log('useEffect')
@@ -89,51 +228,13 @@ const NewCoordinates = () => {
     setMap(map);
 
   
-    const markers = []
-
-    const addCordinateMarker = (lngLat, map) => {
-
-      console.log(coords)
-      const popupOffset = {
-        bottom: [0, -25],
-      }
-
-      const popup = new tt.Popup({
-        offset: popupOffset,
-        closeButton: false,
-        closeOnClick: false,
-        autoClose: false,
-      }).setHTML(`<div>
-      <div><strong>Coordinate ${n}</strong></div>
-      <div>Latitude: ${parseFloat(lngLat.lat).toFixed(4)}</div>
-      <div>Logitude: ${parseFloat(lngLat.lng).toFixed(4)}</div>
-      </div>`)
-      const element = document.createElement('div')
-      element.className = 'marker'
-
-      const marker = new tt.Marker({
-        element: element,
-      })
-        .setLngLat(lngLat)
-        .addTo(map)
-        
-     
-
-      n += 1
-
-      marker.setPopup(popup).togglePopup()
-
-      markers.push(marker)
-    }
-
-    const cTemp = []
 
     map.on('click', (e) => {
-           const {lng, lat} = e.lngLat
-      cTemp.push({lng, lat})
-      setCordinates([...cTemp])
       addCordinateMarker(e.lngLat, map)
     })
+
+
+   
 
 
     return () => map.remove();
@@ -208,7 +309,7 @@ const NewCoordinates = () => {
                       Coordinates Map
                     </label>
                       <div className="mb-3">
-                    <button className="btn btn-lg btn-primary ms-3 mb-2" onClick={addMarkerToLocation}>Add Coordinate</button>
+                    
                     <span>
                       {
                         !isGeolocationAvailable ? (
@@ -216,7 +317,7 @@ const NewCoordinates = () => {
                       ) : !isGeolocationEnabled ? (
                           <div>Geolocation is not enabled</div>
                       ) : coords ? (
-                        <button className="btn btn-lg btn-primary ms-3 mb-2">Add Current Location</button>
+                        <button type="button" className="btn btn-lg btn-primary mb-2" onClick={addMarkerToLocation}>Add Current Location</button>
                       ) : (
                           <div>Getting the location data&hellip; </div>
                       )
@@ -233,12 +334,12 @@ const NewCoordinates = () => {
                     {(cordinates.length > 0)? <>
                     {cordinates.map((val, id) => { 
                       return <div key={id} className="cordinateItem">
-                        <strong>Coordinate {id+1}</strong>{' '}                      
+                        <strong> {val.name}</strong>{' '}                      
                         latitude: <strong>{parseFloat(val.lat).toFixed(4)}</strong>{' '}
                         longitude: <strong>{parseFloat(val.lng).toFixed(4)}</strong>{' '}
                         </div>
                     })}
-                    </>:<div className="cordinateItem">Click on the map to create a Coordinate</div>}
+                    </>:<div className="cordinateItem">Click on the Add Cordinate button to create a Coordinate</div>}
 
                     <div className='card-footer'>
                                 <button type='submit' className='btn btn-lg btn-primary'>
