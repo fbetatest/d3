@@ -29,6 +29,8 @@ const NewJourneytime = () => {
       userDecisionTimeout: 5000,
   });
 
+ 
+
 
   const navigate = useNavigate()
 
@@ -42,12 +44,72 @@ const NewJourneytime = () => {
 
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
+  const [timer, setTimer] = useState(0)
+
+  const tick = useRef(); 
+
+ 
+  
   const startJourneyTime = () =>{
+
+  
+
+    
+
+console.log('start journey time')
+    map.setCenter({lng: coords.longitude , lat: coords.latitude});
+
+    addMarker(coords.longitude ,coords.latitude, 'start-marker' )
+
+    let lastMarker = {lng: coords.longitude ,lat: coords.latitude}
+
+   
+    setTimer(0)
+    let tempTimer = 0;
     setStartJourney(true)
+    tick.current = setInterval(() => { // <-- set tick ref current value
+
+   
+      if(tempTimer%10==0){
+   
+       navigator.geolocation.getCurrentPosition((position)=>{
+      
+        addMarker(position.coords.longitude, position.coords.latitude, 'marker')
+       });
+     
+      }
+     
+     
+      tempTimer +=1;
+
+      setTimer(tempTimer);
+    }, 1000);
+   
+  }
+
+  function addMarker(lng, lat, elementName){
+
+    const element = document.createElement('div')
+    element.className = elementName
+
+    new tt.Marker({
+      element: element,
+    })
+      .setLngLat({lng, lat})
+      .addTo(map)
+
   }
 
   const stopJourneyTime = () =>{
     setStartJourney(false)
+    clearInterval(tick.current);
+
+
+
+    navigator.geolocation.getCurrentPosition((position)=>{
+      addMarker(position.coords.longitude, position.coords.latitude,'end-marker')
+     });
+  
   }
 
   useEffect(() => {
@@ -79,41 +141,7 @@ const NewJourneytime = () => {
     map.addControl(new tt.NavigationControl());
     setMap(map);
 
-    map.on("click", (e) => {
-      const { lng, lat } = e.lngLat;
-      
-      // creating source data with turf.js
-      const sourceID = `circleData ${Math.floor(Math.random() * 10000)}`;
-      let center = turf.point([lng, lat]);
-      let radius = 0.5;
-      let options = {
-        steps: 15,
-        units: "kilometers", // or "mile"
-      };
-      let circle = turf.circle(center, radius, options);
-      map.addSource(sourceID, {
-        type: "geojson",
-        data: circle,
-      });
-
-
-      //fetching and drawing the map
-    
-      
-       
-         
-            map.addLayer({
-              id: `circle ${Math.floor(Math.random() * 10000)}`,
-              type: "fill",
-              source: sourceID,
-              paint: {
-                "fill-color": "yellow",
-                "fill-opacity": 0.6,
-              }
-            })
-       
-    
-    })
+  
     return () => map.remove();
 
    
@@ -196,10 +224,10 @@ const NewJourneytime = () => {
                         <div>
                           {(startJourney)?<>
                             <button type="button" className="btn btn-lg btn-danger mb-2 ms-2" onClick={stopJourneyTime}>Stop Journey Time</button>      
-                           <h2 className='ms-3 mt-3'>00:00:00</h2>     
+                           <h1 className='ms-3 mt-3 display-3'>{timer}s</h1>     
                           </>:<>
                           <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={startJourneyTime}>Start Journey Time</button>      
-                           <h2 className='ms-3 mt-3'>00:00:00</h2>     
+                           <h1 className='ms-3 mt-3 display-3'>{timer}s</h1>     
                           </>}
                                    
                        
