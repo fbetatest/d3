@@ -15,9 +15,21 @@ import {KTSVG} from '../../../_metronic/helpers'
 import {Formik, Form, Field, FieldArray} from 'formik'
 import {getProjectNames} from '../projects/core/_requests'
 
+import { useGeolocated } from "react-geolocated";
+
 const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
 
 const NewJourneytime = () => {
+
+  const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+  useGeolocated({
+      positionOptions: {
+          enableHighAccuracy: true,
+      },
+      userDecisionTimeout: 5000,
+  });
+
+
   const navigate = useNavigate()
 
   const mapElement = useRef();
@@ -26,8 +38,17 @@ const NewJourneytime = () => {
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
 
+  const [startJourney, setStartJourney] = useState(false);
 
   const [projectsList, setProjectsList] = useState(['Loading..'])
+
+  const startJourneyTime = () =>{
+    setStartJourney(true)
+  }
+
+  const stopJourneyTime = () =>{
+    setStartJourney(false)
+  }
 
   useEffect(() => {
 
@@ -160,8 +181,37 @@ const NewJourneytime = () => {
                     </div>
 
                     <label htmlFor='questions' className='fw-bold fs-6 mb-2 mt-4'>
-                      Journeytime Map
+           
                     </label>
+
+                    <div className="mb-3">
+                    
+                    <span>
+                      {
+                        !isGeolocationAvailable ? (
+                          <div>Your browser does not support Geolocation</div>
+                      ) : !isGeolocationEnabled ? (
+                          <div>Geolocation is not enabled</div>
+                      ) : coords ? (
+                        <div>
+                          {(startJourney)?<>
+                            <button type="button" className="btn btn-lg btn-danger mb-2 ms-2" onClick={stopJourneyTime}>Stop Journey Time</button>      
+                           <h2 className='ms-3 mt-3'>00:00:00</h2>     
+                          </>:<>
+                          <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={startJourneyTime}>Start Journey Time</button>      
+                           <h2 className='ms-3 mt-3'>00:00:00</h2>     
+                          </>}
+                                   
+                       
+                        </div>
+                      ) : (
+                          <div>Getting the location data&hellip; </div>
+                      )
+                  }                      
+                    </span>
+                   
+                    </div>
+                    
                     <div ref={mapElement} className="mapDiv" />
 
                     <div className='card-footer'>

@@ -78,6 +78,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <div className='d-flex align-items-center'>
+                        
                         <div className='d-flex justify-content-start flex-column'>
                           <Link
                             to={'../coordinates/' + val.created}
@@ -105,11 +106,22 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     </td>
 
                     <td className='text-end'>
+
+                    <Link to={'../edit-coordinates/' + val.created}>
+                    <button
+                      //edit button                  
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1 ms-3'>
+                        <KTSVG
+                          path='/media/icons/duotune/general/gen055.svg'
+                          className='svg-icon-3'
+                        />
+                      </button>
+                      </Link>
                     
                       <button
                         onClick = { () => {deleteCoordinates(val.created); setCoordinatesData(coordinatesData.filter(item => item.created !== val.created))} }
                   
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                       >
                         <KTSVG
                           path='/media/icons/duotune/general/gen027.svg'

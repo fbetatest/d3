@@ -29,6 +29,21 @@ export function newCoordinates(coordinatesName: string, projectName: string, que
     return axios.put(`${SERVER_URL}newCoordinates`, data)
   }
 
+  export function editCoordinates(coordinatesName: string, projectName: string, questions: Questions[], cordinates: Cordinates[], vid: number) {
+    let data = {
+      coordinatesName,
+      projectName,
+      questions,
+      cordinates,
+      vid
+    }
+  
+    console.log(data)
+
+  
+    return axios.put(`${SERVER_URL}editCoordinates`, data)
+  }
+
   export function deleteCoordinates(vid: number) {
     console.log(vid)
     return axios.delete(`${SERVER_URL}deletecoordinates/${vid}`)

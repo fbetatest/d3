@@ -110,9 +110,6 @@ const CoordinatesID= () => {
 
         marker.setPopup(popup).togglePopup()
     }
-      
-
-
 
 
     return () => map.remove();

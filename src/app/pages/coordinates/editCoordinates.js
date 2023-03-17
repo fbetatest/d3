@@ -9,7 +9,7 @@ import "@tomtom-international/web-sdk-maps/dist/maps.css";
 import * as turf from '@turf/turf'
 import "./coordinates.css";
 import {useNavigate} from 'react-router-dom'
-import {newCoordinates} from './_requests'
+import {getCoordinates, editCoordinates} from './_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 
 import {Formik, Form, Field, FieldArray} from 'formik'
@@ -22,7 +22,26 @@ const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API
 
 
 
-const NewCoordinates = () => {
+const EditCoordinates = () => {
+
+  const {id} = useParams()
+  console.log(id)
+
+  let tempId = '0'
+  if (id) tempId = id
+  console.log(id)
+  const vid = +tempId
+
+
+  const [coordinatesData, setCoordinatesData] = useState({
+    id: 0,
+    coordinatesName: 'Loading..',
+    projectName: '',
+    created: 0,
+    vid: 0,
+    questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
+    coordinates: [{lng:0, lat:0, name: ''}]
+  })
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
   useGeolocated({
@@ -31,6 +50,8 @@ const NewCoordinates = () => {
       },
       userDecisionTimeout: 5000,
   });
+
+
 
 
 
@@ -51,7 +72,6 @@ const NewCoordinates = () => {
     console.log(coords);
 
     addCordinateMarker({lng: coords.longitude , lat: coords.latitude}, map)
-
     map.setCenter({lng: coords.longitude , lat: coords.latitude})
   
   }
@@ -198,6 +218,7 @@ console.log(cordinates.length)
 
 
 
+
   useEffect(() => {
 
     getProjectNames().then((val) => {
@@ -205,6 +226,30 @@ console.log(cordinates.length)
 
       setProjectsList(data)
     })
+
+    
+
+    getCoordinates(vid).then((val) => {
+      const {data} = val;
+
+      
+      setCoordinatesData({
+        id: data._id,
+        coordinatesName: data.coordinatesName,
+        projectName: data.projectName,
+        created: data.created,
+        vid: data.vid,
+        questions: data.questions,
+        coordinates: data.coordinates
+      })
+
+      data.cordinates.map((v, index) => {
+        displayCordinates(v)
+       });
+
+      console.log(data)
+
+    });
 
 
 
@@ -238,6 +283,35 @@ console.log(cordinates.length)
       addCordinateMarker(e.lngLat, map)
     })
 
+    function displayCordinates(v){
+
+      const element = document.createElement('div')
+    element.className = 'marker'
+
+    const marker = new tt.Marker({
+      element: element,
+    })
+      .setLngLat({lng:v.lng, lat:v.lat})
+      .addTo(map)
+
+
+      const markerData ={
+        marker: marker,
+        lng: v.lng,
+        lat: v.lat,
+        id: v._id,
+        name: v.name
+      }
+
+      map.setCenter({lng: v.lng , lat: v.lat})
+
+      
+       onMarkerSave(markerData);
+
+
+
+
+    }
 
    
 
@@ -252,7 +326,7 @@ console.log(cordinates.length)
     <>
       <PageTitle breadcrumbs={[]}>Create New Coordinates</PageTitle>
 
-      <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-800px'>
+      <div className='card card-xxl-stretch mb-5 mb-xxl-8'>
         <div className='card-body py-3 pt-3 pb-3'>
           <div className='row g-5 gx-xxl-12'>
             <div className='col-xxl-12'>
@@ -263,55 +337,23 @@ console.log(cordinates.length)
                   questions: [{fieldName: '', fieldType: 'text', fieldOptions:""}],
                 }}
                 onSubmit={(values) => {
-                  console.log(values)
+                
                   console.log(cordinates)
-                  newCoordinates(values.coordinatesName, values.projectName, values.questions, cordinates).then(()=>{
+                 
+                  editCoordinates(coordinatesData.coordinatesName, coordinatesData.projectName, coordinatesData.questions, cordinates, vid).then(()=>{
                   navigate('/coordinates-page');
                   })
                 }}
               >
                 {(formik) => (
                   <Form>
-                    <label htmlFor='coordinatesName' className='fw-bold fs-6 mb-2 mt-4'>
-                      Coordinates Name
-                    </label>
-                    <input
-                      id='coordinatesName'
-                      name='coordinatesName'
-                      type='text'
-                      className='form-control form-control-lg form-control-solid mb-4'
-                      onChange={formik.handleChange}
-                      value={formik.values.coordinatesName}
-                    />
+                   
+                   
 
-                    <label htmlFor='projects' className='fw-bold fs-6 mb-2'>
-                      Project Name
-                    </label>
-
-                    <div role='group' aria-labelledby='my-radio-group mb-4'>
-                      {projectsList.map((name, id) => {
-                        return (
-                          <label
-                            key={id}
-                            className='d-flex align-items-center justify-content-between cursor-pointer  '
-                          >
-                            <label className='form-check form-check-sm form-check-custom form-check-solid me-5 mb-3'>
-                              <input
-                                type='radio'
-                                name='projectName'
-                                value={name}
-                                className='form-check-input me-1'
-                                onChange={formik.handleChange}
-                              />
-                              {name}
-                            </label>
-                          </label>
-                        )
-                      })}
-                    </div>
+                
 
                     <label htmlFor='questions' className='fw-bold fs-6 mb-2 mt-4'>
-                      Coordinates Map
+                      Coordinates Map: {coordinatesData.coordinatesName}
                     </label>
                       <div className="mb-3">
                     
@@ -323,9 +365,10 @@ console.log(cordinates.length)
                           <div>Geolocation is not enabled</div>
                       ) : coords ? (
                         <div>
-                           <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={addMarkerToLocation}>Add Current Location</button>
-                           <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={LocateMe}>Locate me</button>
+                        <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={addMarkerToLocation}>Add Current Location</button>
+                        <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={LocateMe}>Locate me</button>
                         </div>
+                        
                       ) : (
                           <div>Getting the location data&hellip; </div>
                       )
@@ -352,7 +395,7 @@ console.log(cordinates.length)
                     <div className='card-footer'>
                                 <button type='submit' className='btn btn-lg btn-primary'>
                                   {' '}
-                                  Create Coordinates{' '}
+                                  Save Coordinates{' '}
                                   <KTSVG
                                     path='/media/icons/duotune/arrows/arr064.svg'
                                     className='svg-icon-3 ms-2 me-0'
@@ -371,12 +414,12 @@ console.log(cordinates.length)
   )
 }
 
-const NewCoordinatesWrapper = () => {
+const EditCoordinatesWrapper = () => {
   return (
     <>
-      <NewCoordinates />
+      <EditCoordinates />
     </>
   )
 }
 
-export {NewCoordinatesWrapper}
+export {EditCoordinatesWrapper}
