@@ -61,7 +61,7 @@ console.log('start journey time')
 
     addMarker(coords.longitude ,coords.latitude, 'start-marker' )
 
-    let lastMarker = {lng: coords.longitude ,lat: coords.latitude}
+    let lastMarker = {longitude: coords.longitude ,latitude: coords.latitude}
 
    
     setTimer(0)
@@ -73,8 +73,11 @@ console.log('start journey time')
       if(tempTimer%10==0){
    
        navigator.geolocation.getCurrentPosition((position)=>{
-      
-        addMarker(position.coords.longitude, position.coords.latitude, 'marker')
+
+        lastMarker = { longitude: lastMarker.longitude+0.0002,
+        latitude: lastMarker.latitude+0.0002}
+          addMarker(lastMarker.longitude, lastMarker.latitude, 'marker')
+      //  addMarker(position.coords.longitude, position.coords.latitude, 'marker')
        });
      
       }

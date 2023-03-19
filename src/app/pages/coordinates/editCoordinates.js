@@ -63,6 +63,7 @@ const EditCoordinates = () => {
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
   const [cordinates, setCordinates] = useState([])
+  const cordinatesRef = useRef(cordinates)
 
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
@@ -139,39 +140,41 @@ const EditCoordinates = () => {
     })
 
   }
-  let cTemp=[];
-
   const onMarkerSave = (markerData) =>{
-console.log(markerData)
-
-    const popup = new tt.Popup(
-      popupOptions,
-     ).setHTML(detailsPopup(
-      markerData.lng.toFixed(4),
-      markerData.lat.toFixed(4),
-      markerData.name,
-      markerData.id))
-      markerData.marker.setPopup(popup).togglePopup();
-
-      cTemp.push({id: markerData.id, name: markerData.name, lng:markerData.lng, lat: markerData.lat})
-
-      console.log(cTemp)
-
-      setCordinates([...cTemp])
-
-console.log(cordinates.length)
-    document.getElementById(`remove-${markerData.id}`).addEventListener('click', function () {
-      markerData.marker.remove();
-   
-     cTemp = cTemp.filter(item=> item.id != markerData.id)
-     setCordinates([...cTemp])
-   
-
-    })
-
-   
-
-  }
+    console.log(markerData)
+    
+        const popup = new tt.Popup(
+          popupOptions,
+         ).setHTML(detailsPopup(
+          markerData.lng.toFixed(4),
+          markerData.lat.toFixed(4),
+          markerData.name,
+          markerData.id))
+          markerData.marker.setPopup(popup).togglePopup();
+    
+          let coTemp = cordinatesRef.current;
+    
+          coTemp.push({id: markerData.id, name: markerData.name, lng:markerData.lng, lat: markerData.lat})
+    
+         
+    
+          setCordinates([...coTemp])
+    
+        console.log(cordinates.length)
+        document.getElementById(`remove-${markerData.id}`).addEventListener('click', function () {
+          markerData.marker.remove();
+        
+        let cTemp = cordinatesRef.current.filter(item=> item.id != markerData.id)
+         console.log(cTemp)
+      
+         cordinatesRef.current = cTemp
+         coTemp = cTemp;
+         setCordinates([...coTemp])
+       
+    
+        })
+    
+      }
 
  const inputPopup = (id) =>{ 
     return `<div class="form">

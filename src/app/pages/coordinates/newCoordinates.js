@@ -42,21 +42,13 @@ const NewCoordinates = () => {
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
   const [cordinates, setCordinates] = useState([])
-
+  const cordinatesRef = useRef(cordinates)
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
 
-  const addMarkerToLocation = ()=>{
-   
-    console.log(coords);
-
-    addCordinateMarker({lng: coords.longitude , lat: coords.latitude}, map)
-
-    map.setCenter({lng: coords.longitude , lat: coords.latitude})
   
-  }
 
-  const LocateMe = ()=>{
+   const LocateMe = ()=>{
     console.log(coords);
     map.setCenter({lng: coords.longitude , lat: coords.latitude});
   }
@@ -119,7 +111,7 @@ const NewCoordinates = () => {
     })
 
   }
-  let cTemp=[];
+
 
   const onMarkerSave = (markerData) =>{
 console.log(markerData)
@@ -133,23 +125,27 @@ console.log(markerData)
       markerData.id))
       markerData.marker.setPopup(popup).togglePopup();
 
-      cTemp.push({id: markerData.id, name: markerData.name, lng:markerData.lng, lat: markerData.lat})
+      let coTemp = cordinatesRef.current;
 
-      console.log(cTemp)
+      coTemp.push({id: markerData.id, name: markerData.name, lng:markerData.lng, lat: markerData.lat})
 
-      setCordinates([...cTemp])
+     
 
-console.log(cordinates.length)
+      setCordinates([...coTemp])
+
+    console.log(cordinates.length)
     document.getElementById(`remove-${markerData.id}`).addEventListener('click', function () {
       markerData.marker.remove();
-   
-     cTemp = cTemp.filter(item=> item.id != markerData.id)
-     setCordinates([...cTemp])
+    
+    let cTemp = cordinatesRef.current.filter(item=> item.id != markerData.id)
+     console.log(cTemp)
+  
+     cordinatesRef.current = cTemp
+     coTemp = cTemp;
+     setCordinates([...coTemp])
    
 
     })
-
-   
 
   }
 
@@ -194,6 +190,15 @@ console.log(cordinates.length)
     })
   }
 
+  const addMarkerToLocation =  (()=>{
+    console.log(coords);
+
+    addCordinateMarker({lng: coords.longitude , lat: coords.latitude}, map)
+
+    map.setCenter({lng: coords.longitude , lat: coords.latitude})
+
+  })
+
 
 
 
@@ -237,6 +242,14 @@ console.log(cordinates.length)
     map.on('click', (e) => {
       addCordinateMarker(e.lngLat, map)
     })
+
+
+
+
+ 
+
+
+  
 
 
    
