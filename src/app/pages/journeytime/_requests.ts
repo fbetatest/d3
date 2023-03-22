@@ -9,11 +9,12 @@ type Questions = {
     fieldOptions: string
   }
 
-export function newJourneytime(journeytimeName: string, projectName: string, questions: Questions[]) {
+export function newJourneytime(journeytimeName: string, projectName: string, questions: Questions[], locationPoints: string) {
     let data = {
       journeytimeName,
       projectName,
       questions,
+      locationPoints
     }
   
     console.log(data)

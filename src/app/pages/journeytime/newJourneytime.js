@@ -4,6 +4,8 @@ import {FC} from 'react'
 
 import { useEffect, useState, useRef } from "react";
 import * as tt from "@tomtom-international/web-sdk-maps";
+import ttservices from "@tomtom-international/web-sdk-services";
+
 // styles
 import "@tomtom-international/web-sdk-maps/dist/maps.css";
 import * as turf from '@turf/turf'
@@ -16,6 +18,7 @@ import {Formik, Form, Field, FieldArray} from 'formik'
 import {getProjectNames} from '../projects/core/_requests'
 
 import { useGeolocated } from "react-geolocated";
+
 
 const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
 
@@ -46,8 +49,35 @@ const NewJourneytime = () => {
 
   const [timer, setTimer] = useState(0)
 
+  const [locationPoints, setLocationPoints]=useState([])
+
   const tick = useRef(); 
 
+
+
+
+  
+
+    
+
+    const getLocations =(points) =>{
+      let resultStr = '';
+
+      points.map((v)=>{
+
+        resultStr+=v.lng+','+v.lat+':'
+
+      })
+      resultStr = resultStr.substring(0, resultStr.length - 1);
+      console.log(resultStr)
+      return (resultStr)
+    }
+
+
+  
+
+
+    
  
   
   const startJourneyTime = () =>{
@@ -63,6 +93,11 @@ console.log('start journey time')
 
     let lastMarker = {longitude: coords.longitude ,latitude: coords.latitude}
 
+
+    setLocationPoints([{lng:coords.longitude, lat:coords.latitude} ])
+
+    console.log(locationPoints)
+
    
     setTimer(0)
     let tempTimer = 0;
@@ -70,14 +105,28 @@ console.log('start journey time')
     tick.current = setInterval(() => { // <-- set tick ref current value
 
    
-      if(tempTimer%10==0){
+      if(tempTimer%4==0){
    
        navigator.geolocation.getCurrentPosition((position)=>{
+        const lngLatDiff= 0.00022;
+        const lngDiff = Math.abs(lastMarker.longitude-position.coords.longitude)
+        const latDiff = Math.abs(lastMarker.latitude-position.coords.latitude)
 
-        lastMarker = { longitude: lastMarker.longitude+0.0002,
-        latitude: lastMarker.latitude+0.0002}
-          addMarker(lastMarker.longitude, lastMarker.latitude, 'marker')
-      //  addMarker(position.coords.longitude, position.coords.latitude, 'marker')
+        if(lngDiff >= lngLatDiff || latDiff>= lngLatDiff){
+
+          lastMarker = { longitude: position.coords.longitude,
+            latitude: position.coords.latitude}
+
+            setLocationPoints([...locationPoints,{lng:coords.longitude, lat:coords.latitude} ])
+
+            addMarker(position.coords.longitude, position.coords.latitude, 'marker')
+
+        }
+
+
+        
+          
+      
        });
      
       }
@@ -111,6 +160,34 @@ console.log('start journey time')
 
     navigator.geolocation.getCurrentPosition((position)=>{
       addMarker(position.coords.longitude, position.coords.latitude,'end-marker')
+      console.log(locationPoints)
+      let locationTemp = locationPoints;
+      console.log(locationTemp)
+      locationTemp.push({lng:coords.longitude, lat:coords.latitude})
+      console.log(locationTemp)
+      setLocationPoints([...locationTemp ])
+      console.log({lng:coords.longitude, lat:coords.latitude})
+      console.log(locationPoints)
+      ttservices.services.calculateRoute({
+        key: tomtom_api_key,
+        traffic: false,
+        locations: getLocations(locationPoints)
+      }).then((response)=>{
+        var geojson = response.toGeoJson();
+        console.log(geojson)
+        map.addLayer({
+          'id': 'route',
+          'type': 'line',
+          'source': {
+              'type': 'geojson',
+              'data': geojson
+          },
+          'paint': {
+              'line-color': '#2faaff',
+              'line-width': 5
+          }
+      });
+      })
      });
   
   }
@@ -125,6 +202,8 @@ console.log('start journey time')
 
 
     console.log('useEffect')
+
+    
    
 
 
@@ -143,6 +222,19 @@ console.log('start journey time')
     map.addControl(new tt.FullscreenControl());
     map.addControl(new tt.NavigationControl());
     setMap(map);
+
+    navigator.geolocation.getCurrentPosition((position)=>{
+      map.setCenter({lng: position.coords.longitude , lat: position.coords.latitude});
+    });
+
+
+
+   
+
+  
+    
+
+  
 
   
     return () => map.remove();
@@ -166,7 +258,7 @@ console.log('start journey time')
                 onSubmit={(values) => {
                   console.log(values)
 
-                  newJourneytime(values.journeytimeName, values.projectName, values.questions).then(()=>{
+                  newJourneytime(values.journeytimeName, values.projectName, values.questions, getLocations(locationPoints)).then(()=>{
                   navigate('/journeytime-page');
                   })
                 }}
@@ -260,6 +352,7 @@ console.log('start journey time')
                 )}
               </Formik>
             </div>
+            
           </div>
         </div>
       </div>
