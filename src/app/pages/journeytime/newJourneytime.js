@@ -51,6 +51,8 @@ const NewJourneytime = () => {
 
   const [locationPoints, setLocationPoints]=useState([])
 
+  const locationRef= useRef(locationPoints);
+
   const tick = useRef(); 
 
 
@@ -93,7 +95,7 @@ console.log('start journey time')
 
     let lastMarker = {longitude: coords.longitude ,latitude: coords.latitude}
 
-
+    
     setLocationPoints([{lng:coords.longitude, lat:coords.latitude} ])
 
     console.log(locationPoints)
@@ -105,10 +107,12 @@ console.log('start journey time')
     tick.current = setInterval(() => { // <-- set tick ref current value
 
    
-      if(tempTimer%4==0){
+      if(tempTimer%3==0){
    
        navigator.geolocation.getCurrentPosition((position)=>{
-        const lngLatDiff= 0.00022;
+
+        
+        const lngLatDiff= 0.0003;
         const lngDiff = Math.abs(lastMarker.longitude-position.coords.longitude)
         const latDiff = Math.abs(lastMarker.latitude-position.coords.latitude)
 
@@ -117,15 +121,23 @@ console.log('start journey time')
           lastMarker = { longitude: position.coords.longitude,
             latitude: position.coords.latitude}
 
-            setLocationPoints([...locationPoints,{lng:coords.longitude, lat:coords.latitude} ])
+            const locationTemp = [...locationRef.current,{lng:position.coords.longitude, lat:position.coords.latitude} ]
+            lastMarker = { longitude: position.coords.longitude,latitude: position.coords.latitude}
+     
+             locationRef.current = locationTemp;
+             setLocationPoints(locationTemp)
+             
+     
+             addMarker(position.coords.longitude, position.coords.latitude, 'marker')
 
-            addMarker(position.coords.longitude, position.coords.latitude, 'marker')
+          
 
         }
 
 
+
         
-          
+     
       
        });
      
@@ -165,7 +177,8 @@ console.log('start journey time')
       console.log(locationTemp)
       locationTemp.push({lng:coords.longitude, lat:coords.latitude})
       console.log(locationTemp)
-      setLocationPoints([...locationTemp ])
+      locationRef.current = [...locationTemp ];
+      setLocationPoints([...locationTemp ]);
       console.log({lng:coords.longitude, lat:coords.latitude})
       console.log(locationPoints)
       ttservices.services.calculateRoute({
