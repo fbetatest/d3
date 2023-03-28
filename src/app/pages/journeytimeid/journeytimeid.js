@@ -83,6 +83,7 @@ const JourneytimeID= () => {
     
     if(journeytimeData.startLocation!==""){
 
+
       const locationArr = journeytimeData.locationPoints.split(":")
       console.log(locationArr)
      const locationStart = journeytimeData.startLocation.split(",")
@@ -182,11 +183,23 @@ const JourneytimeID= () => {
     <>
       <PageTitle breadcrumbs={[]}>{journeytimeData.journeytimeName}</PageTitle>
       <div className='fw-semibold fs-6 mb-2'>Project: {journeytimeData.projectName}</div>
-       {journeytimeData.locationPoints}
-      <div>Time: {journeytimeData?.totalTime}s </div>
-       {journeytimeData?.totalDistance}
+      
+     
+    
+       
       <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-1200px'>
         <div className='card-body py-3'>
+        <div className=''>
+        <span className='fs-3'>Total Time: </span> 
+        <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalTime}</span> 
+        <span className='fs-3'> seconds</span>
+      </div> 
+
+      <div className=''>
+        <span className='fs-3'>Total Distance: </span> 
+        <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalDistance}</span> 
+        <span className='fs-3'> meters</span>
+      </div> 
           <div className='row g-5 gx-xxl-12'>
           <div className='col-xxl-12'>
           <div ref={mapElement} className="mapDiv" />

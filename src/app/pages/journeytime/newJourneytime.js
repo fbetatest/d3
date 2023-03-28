@@ -55,6 +55,7 @@ const NewJourneytime = () => {
 
   const [endLocation, setEndLocation] = useState('')
   const [startLocation, setStartLocation] = useState('')
+  const [totalDistance, setTotalDistance] = useState(0)
 
   const tick = useRef(); 
 
@@ -203,6 +204,10 @@ navigator.geolocation.getCurrentPosition((p)=>{
       }).then((response)=>{
         var geojson = response.toGeoJson();
         console.log(geojson)
+      
+
+        setTotalDistance(geojson.features[0].properties.summary.lengthInMeters)
+        
         map.addLayer({
           'id': 'route',
           'type': 'line',
@@ -288,7 +293,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
                   console.log(endLocation)
 
                   const totalTime = timer;
-                  const totalDistance = 0;
+                 
 
 
                   newJourneytime(values.journeytimeName, values.projectName, values.questions, 
