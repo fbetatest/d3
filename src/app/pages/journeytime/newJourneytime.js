@@ -82,26 +82,42 @@ const NewJourneytime = () => {
   
 
 
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+    
+    
+    
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
     
  
   
   const startJourneyTime = () =>{
+
+ 
 
   
 
     
 
 console.log('start journey time')
-    map.setCenter({lng: coords.longitude , lat: coords.latitude});
 
-    addMarker(coords.longitude ,coords.latitude, 'start-marker' )
+navigator.geolocation.getCurrentPosition((p)=>{
+    map.setCenter({lng: p.coords.longitude , lat: p.coords.latitude});
 
-    let lastMarker = {longitude: coords.longitude ,latitude: coords.latitude}
+    addMarker(p.coords.longitude ,p.coords.latitude, 'start-marker' )
+
+    let lastMarker = {longitude: p.coords.longitude ,latitude: p.coords.latitude}
 
     
-   
+   console.log(p.coords)
 
-    setStartLocation(`${coords.longitude},${coords.latitude}`)
+    setStartLocation(`${p.coords.longitude},${p.coords.latitude}`)
 
     console.log(startLocation)
 
@@ -137,13 +153,15 @@ console.log('start journey time')
 
         }
      
-       });
+       }, error, options);
      
       }
           
       tempTimer +=1;
       setTimer(tempTimer);
     }, 1000);
+
+  }, error, options);
    
   }
 
@@ -163,7 +181,7 @@ console.log('start journey time')
   const stopJourneyTime = () =>{
     setStartJourney(false)
     clearInterval(tick.current);
-
+    console.log(options)
 
 
     navigator.geolocation.getCurrentPosition((position)=>{
@@ -198,7 +216,7 @@ console.log('start journey time')
           }
       });
       })
-     });
+     }, error, options);
   
   }
 
