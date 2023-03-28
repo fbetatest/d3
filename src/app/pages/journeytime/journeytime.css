@@ -42,3 +42,20 @@
 
 
 }
+
+
+.tt-icon-number {
+  align-items: center;
+  background: #ffffff;
+  background-color: #8dc3eb;
+  border-radius: 50%;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  margin-right: 14px;
+  padding: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius:18px;
+  border: solid 1px #eee;
+}

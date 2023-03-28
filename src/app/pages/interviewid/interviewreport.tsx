@@ -11,6 +11,8 @@ import {deleteInterviewData, getInterviewData, saveInterviewData} from './_reque
 import * as XLSX from 'xlsx';
 import * as fs from 'fs';
 
+import { useAuth } from '../../modules/auth'
+
 
 
 
@@ -23,7 +25,7 @@ const InterviewReport: FC = () => {
   if (id) tempId = id
   console.log(id)
   const vid: number = +tempId
-
+  const {currentUser} = useAuth()
   const [interviewData, setInterviewData] = useState({
     id: 0,
     interviewName: 'Loading..',
@@ -124,7 +126,9 @@ const InterviewReport: FC = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1 me-3 '>{interviewData.interviewName}</span>
           <span>  
-          <button className="btn btn-sm fw-bold btn-primary" onClick={handleOnExport}>Download Data</button>
+          {(currentUser?.first_name == "Admin Odc")?
+          <button className="btn btn-sm fw-bold btn-primary" onClick={handleOnExport}>Download Data</button>:
+          <></>}
             
           </span>
           <div className='card-label fw-bold fs-6 mb-3 pt-2'>Project: {interviewData.projectName}</div>

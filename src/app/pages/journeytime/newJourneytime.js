@@ -53,6 +53,9 @@ const NewJourneytime = () => {
 
   const locationRef= useRef(locationPoints);
 
+  const [endLocation, setEndLocation] = useState('')
+  const [startLocation, setStartLocation] = useState('')
+
   const tick = useRef(); 
 
 
@@ -96,9 +99,11 @@ console.log('start journey time')
     let lastMarker = {longitude: coords.longitude ,latitude: coords.latitude}
 
     
-    setLocationPoints([{lng:coords.longitude, lat:coords.latitude} ])
+   
 
-    console.log(locationPoints)
+    setStartLocation(`${coords.longitude},${coords.latitude}`)
+
+    console.log(startLocation)
 
    
     setTimer(0)
@@ -130,22 +135,13 @@ console.log('start journey time')
      
              addMarker(position.coords.longitude, position.coords.latitude, 'marker')
 
-          
-
         }
-
-
-
-        
      
-      
        });
      
       }
-     
-     
+          
       tempTimer +=1;
-
       setTimer(tempTimer);
     }, 1000);
    
@@ -171,20 +167,21 @@ console.log('start journey time')
 
 
     navigator.geolocation.getCurrentPosition((position)=>{
-      addMarker(position.coords.longitude, position.coords.latitude,'end-marker')
+      
       console.log(locationPoints)
-      let locationTemp = locationPoints;
-      console.log(locationTemp)
-      locationTemp.push({lng:coords.longitude, lat:coords.latitude})
-      console.log(locationTemp)
-      locationRef.current = [...locationTemp ];
-      setLocationPoints([...locationTemp ]);
-      console.log({lng:coords.longitude, lat:coords.latitude})
-      console.log(locationPoints)
+     const endLocationTemp =`${position.coords.longitude},${(position.coords.latitude)}`;
+     addMarker(position.coords.longitude, position.coords.latitude,'end-marker')
+     
+      setEndLocation(endLocationTemp)
+      console.log(startLocation)
+      console.log(endLocationTemp)
+
+      
       ttservices.services.calculateRoute({
         key: tomtom_api_key,
         traffic: false,
-        locations: getLocations(locationPoints)
+        locations: startLocation+":"+endLocationTemp,
+        supportingPoints: getLocations(locationPoints)
       }).then((response)=>{
         var geojson = response.toGeoJson();
         console.log(geojson)
@@ -270,8 +267,14 @@ console.log('start journey time')
                 }}
                 onSubmit={(values) => {
                   console.log(values)
+                  console.log(endLocation)
 
-                  newJourneytime(values.journeytimeName, values.projectName, values.questions, getLocations(locationPoints)).then(()=>{
+                  const totalTime = timer;
+                  const totalDistance = 0;
+
+
+                  newJourneytime(values.journeytimeName, values.projectName, values.questions, 
+                    getLocations(locationPoints), endLocation, startLocation, totalDistance, totalTime).then(()=>{
                   navigate('/journeytime-page');
                   })
                 }}
