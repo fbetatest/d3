@@ -7,7 +7,7 @@ import {PageTitle} from '../../../_metronic/layout/core'
 import {Link} from 'react-router-dom'
 
 import {getProjects} from './_requests'
-
+import { useAuth } from '../../modules/auth'
 import {KTSVG} from '../../../_metronic/helpers'
 import {
 
@@ -17,7 +17,7 @@ import {
 import { deleteProject } from '../projects/core/_requests'
 
 const DashboardPage: FC = () => {
-
+  const {currentUser} = useAuth()
   const [projectsData, setProjectsData] = useState([
     {vid: 0,  projectName: 'Loading..', created: 0,  projectDescription: '', surveyors: [], tasks: []},
   ])
@@ -150,8 +150,8 @@ return(<>
                     </td>
 
                     <td className='text-end'>
-                      
-                      <button
+                    {(currentUser?.first_name == "Admin Odc")?
+                    <button
                      onClick = { () => {deleteProject(val.vid); setProjectsData(projectsData.filter(item => item.vid !== val.vid))} }
                   
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
@@ -160,7 +160,8 @@ return(<>
                           path='/media/icons/duotune/general/gen027.svg'
                           className='svg-icon-3'
                         />
-                      </button>
+                      </button>:""
+                }
                     </td>
                   </tr>
                 )

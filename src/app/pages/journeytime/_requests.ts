@@ -13,7 +13,9 @@ export function newJourneytime(journeytimeName: string, projectName: string,
   questions: Questions[], locationPoints: string,   endLocation: string,
   startLocation: string,
   totalDistance: number,
-  totalTime: number) {
+  totalTime: number,
+  journeyStartTime: number,
+  journeyEndTime: number) {
     let data = {
       journeytimeName,
       projectName,
@@ -22,8 +24,12 @@ export function newJourneytime(journeytimeName: string, projectName: string,
       endLocation,
       startLocation,
       totalDistance,
-      totalTime
+      totalTime,
+      journeyStartTime,
+      journeyEndTime
     }
+
+    console.log(journeyEndTime)
   
     console.log(data)
     console.log(questions)

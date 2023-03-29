@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import {FC} from 'react'
 import { deleteJourneytime, getAllJourneytime} from './_requests'
-
+import { useAuth } from '../../modules/auth'
 type Props = {
   className: string
 }
@@ -13,7 +13,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
   const [journeytimeData, setJourneytimeData] = useState([
     {id: 0, journeytimeName: 'Loading..', projectName: '', created: 0},
   ])
-
+  const {currentUser} = useAuth()
   useEffect(() => {
     getAllJourneytime().then((val)=>{
    const {data} = val;
@@ -105,7 +105,13 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     </td>
 
                     <td className='text-end'>
-                    
+                    <button
+                       
+                        className='btn btn-bg-light btn-active-color-primary btn-sm me-5'
+                      >
+                       + Video
+                      </button>
+                    {(currentUser?.first_name == "Admin Odc")?
                       <button
                         onClick = { () => {deleteJourneytime(val.created); setJourneytimeData(journeytimeData.filter(item => item.created !== val.created))} }
                   
@@ -115,7 +121,8 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                           path='/media/icons/duotune/general/gen027.svg'
                           className='svg-icon-3'
                         />
-                      </button>
+                      </button>:""
+                }
                     </td>
                   </tr>
                 )

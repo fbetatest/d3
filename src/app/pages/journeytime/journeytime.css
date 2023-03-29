@@ -20,10 +20,12 @@
 .start-marker{
   background-image: url('cordinate.png');
   background-size: cover;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius:18px;
- 
+
+  margin-top: 14px;
+
   background-color: rgba(8, 177, 220, 0.5);
   border: solid 3px rgb(0, 235, 90);
 }
@@ -32,12 +34,12 @@
 .end-marker{
 
   background-size: cover;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius:18px;
   background-color: rgba(8, 177, 220, 0.5);
   border: solid 3px rgb(235, 102, 0);
-
+  margin-top: 14px;
   background-image: url('cordinate.png');
 
 
@@ -58,4 +60,5 @@
   height: 28px;
   border-radius:18px;
   border: solid 1px #eee;
+ 
 }

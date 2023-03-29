@@ -56,6 +56,9 @@ const NewJourneytime = () => {
   const [endLocation, setEndLocation] = useState('')
   const [startLocation, setStartLocation] = useState('')
   const [totalDistance, setTotalDistance] = useState(0)
+  const [journeyStartTime, setJourneyStartTime] = useState(0)
+  const [journeyEndTime, setJourneyEndTime] = useState(0)
+
 
   const tick = useRef(); 
 
@@ -103,7 +106,7 @@ const NewJourneytime = () => {
  
 
   
-
+setJourneyStartTime(Date.now())
     
 
 console.log('start journey time')
@@ -151,6 +154,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
              
      
              addMarker(position.coords.longitude, position.coords.latitude, 'marker')
+             map.setCenter({lng: position.coords.longitude , lat: position.coords.latitude});
 
         }
      
@@ -180,6 +184,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
   }
 
   const stopJourneyTime = () =>{
+    setJourneyEndTime(Date.now())
     setStartJourney(false)
     clearInterval(tick.current);
     console.log(options)
@@ -297,7 +302,8 @@ navigator.geolocation.getCurrentPosition((p)=>{
 
 
                   newJourneytime(values.journeytimeName, values.projectName, values.questions, 
-                    getLocations(locationPoints), endLocation, startLocation, totalDistance, totalTime).then(()=>{
+                    getLocations(locationPoints), endLocation, startLocation, 
+                    totalDistance, totalTime, journeyStartTime, journeyEndTime).then(()=>{
                   navigate('/journeytime-page');
                   })
                 }}

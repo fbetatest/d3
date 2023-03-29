@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import {FC} from 'react'
 import { deleteCoordinates, getAllCoordinates} from './_requests'
-
+import { useAuth } from '../../modules/auth'
 type Props = {
   className: string
 }
@@ -13,7 +13,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
   const [coordinatesData, setCoordinatesData] = useState([
     {id: 0, coordinatesName: 'Loading..', projectName: '', created: 0},
   ])
-
+  const {currentUser} = useAuth()
   useEffect(() => {
     getAllCoordinates().then((val)=>{
    const {data} = val;
@@ -117,7 +117,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                         />
                       </button>
                       </Link>
-                    
+                      {(currentUser?.first_name == "Admin Odc")?
                       <button
                         onClick = { () => {deleteCoordinates(val.created); setCoordinatesData(coordinatesData.filter(item => item.created !== val.created))} }
                   
@@ -127,7 +127,8 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                           path='/media/icons/duotune/general/gen027.svg'
                           className='svg-icon-3'
                         />
-                      </button>
+                      </button>:""
+                }
                     </td>
                   </tr>
                 )

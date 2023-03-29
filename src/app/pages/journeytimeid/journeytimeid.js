@@ -37,14 +37,18 @@ const JourneytimeID= () => {
     startLocation:"",
     endLocation:"",
     totalTime: 0,
-    totalDistance:0
+    totalDistance:0,
+    journeyStartTime: 0,
+    journeyEndTime:0
   })
+
+  
 
 
   const mapElement = useRef();
   const [mapLongitude, setMapLongitude] = useState(55.2708);
   const [mapLatitude, setMapLatitude] = useState(25.2048);
-  const [mapZoom, setMapZoom] = useState(14);
+  const [mapZoom, setMapZoom] = useState(13.6);
   const [map, setMap] = useState({});
 
   
@@ -70,6 +74,8 @@ const JourneytimeID= () => {
       zoom: mapZoom,
       language: "en-GB",
     });
+    map.addControl(new tt.FullscreenControl());
+    map.addControl(new tt.NavigationControl());
     setMap(map);
 
 
@@ -89,9 +95,9 @@ const JourneytimeID= () => {
      const locationStart = journeytimeData.startLocation.split(",")
      console.log(locationStart)
     const locationEnd= journeytimeData.endLocation.split(",")
-      addMarker(locationStart[0], locationStart[1], "start-marker")
+    //  addMarker(locationStart[0], locationStart[1], "start-marker")
      map.setCenter({lng: parseFloat(locationStart[0]) , lat: parseFloat(locationStart[1])});
-      addMarker(locationEnd[0], locationEnd[1], "end-marker")
+  
       console.log(locationStart)
       console.log(locationEnd)
       const supportingPoints = ()=>{ 
@@ -101,7 +107,7 @@ const JourneytimeID= () => {
         
         resultStr+=v+":"
         const markerP = v.split(",")
-        addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
+      //  addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
         
         
       })
@@ -114,8 +120,6 @@ const JourneytimeID= () => {
 
       }
 
-     
-
 
       ttservices.services.calculateRoute({
         key: tomtom_api_key,
@@ -126,6 +130,10 @@ const JourneytimeID= () => {
       }).then((response)=>{
         var geojson = response.toGeoJson();
         console.log(geojson)
+        const startMarker = geojson.features[0].geometry.coordinates[0];
+        addMarker(startMarker[0], startMarker[1], "start-marker")
+        const endMarker = geojson.features[0].geometry.coordinates[geojson.features[0].properties.sections[0].endPointIndex];
+        addMarker(endMarker[0], endMarker[1], "end-marker")
         map.addLayer({
           'id': 'route',
           'type': 'line',
@@ -189,17 +197,26 @@ const JourneytimeID= () => {
        
       <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-1200px'>
         <div className='card-body py-3'>
-        <div className=''>
-        <span className='fs-3'>Total Time: </span> 
-        <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalTime}</span> 
-        <span className='fs-3'> seconds</span>
-      </div> 
+          <div className='d-flex mb-3 ms-2'>
+          <div className='me-5'>
+          <div className='fs-3'>Journey Time </div> 
+          <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalTime}</span> 
+          <span className='fs-3'> seconds</span>
+        </div> 
 
-      <div className=''>
-        <span className='fs-3'>Total Distance: </span> 
-        <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalDistance}</span> 
-        <span className='fs-3'> meters</span>
-      </div> 
+        <div className=''>
+          <div className='fs-3'>Total Distance </div> 
+          <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalDistance}</span> 
+          <span className='fs-3'> meters</span>
+        </div> 
+       </div>
+       
+        {(journeytimeData?.journeyStartTime)?
+        <div className='d-flex mb-3 ms-2'>  
+        <span className="me-3">start: {new Date(journeytimeData?.journeyStartTime).toLocaleString()}</span>
+        <span>end: {new Date(journeytimeData?.journeyEndTime).toLocaleString()}</span>
+        </div>:""}
+     
           <div className='row g-5 gx-xxl-12'>
           <div className='col-xxl-12'>
           <div ref={mapElement} className="mapDiv" />
