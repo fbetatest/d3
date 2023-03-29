@@ -107,15 +107,15 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     <td className='text-end'>
                     <button
                        
-                        className='btn btn-bg-light btn-active-color-primary btn-sm me-5'
+                        className='btn btn-bg-light btn-active-color-primary btn-sm'
                       >
-                       + Video
+                       +V
                       </button>
                     {(currentUser?.first_name == "Admin Odc")?
                       <button
                         onClick = { () => {deleteJourneytime(val.created); setJourneytimeData(journeytimeData.filter(item => item.created !== val.created))} }
                   
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-5'
                       >
                         <KTSVG
                           path='/media/icons/duotune/general/gen027.svg'
