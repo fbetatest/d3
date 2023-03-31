@@ -10,7 +10,7 @@ import * as tt from "@tomtom-international/web-sdk-maps";
 // styles
 import "@tomtom-international/web-sdk-maps/dist/maps.css";
 import ttservices from "@tomtom-international/web-sdk-services";
-
+import {Link} from 'react-router-dom'
 import * as turf from '@turf/turf'
 import "./journeytime.css";
 
@@ -39,7 +39,8 @@ const JourneytimeID= () => {
     totalTime: 0,
     totalDistance:0,
     journeyStartTime: 0,
-    journeyEndTime:0
+    journeyEndTime:0,
+    videoLink:""
   })
 
   
@@ -125,7 +126,7 @@ const JourneytimeID= () => {
         key: tomtom_api_key,
         traffic: false,
         locations: locationStart.join() + ':' + locationEnd.join(),
-        supportingPoints: (journeytimeData.locationPoints!=="")? supportingPoints():undefined,
+        supportingPoints: (locationArr.length>1)? supportingPoints():undefined,
    
       }).then((response)=>{
         var geojson = response.toGeoJson();
@@ -200,16 +201,15 @@ const JourneytimeID= () => {
           <div className='d-flex mb-3 ms-2'>
           <div className='me-5'>
           <div className='fs-3'>Journey Time </div> 
-          <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalTime}</span> 
-          <span className='fs-3'> seconds</span>
+          <span className='text-primary fs-1 fw-bold '>{Math.floor(journeytimeData?.totalTime / 60)}m {journeytimeData?.totalTime%60}s</span> 
         </div> 
 
         <div className=''>
           <div className='fs-3'>Total Distance </div> 
-          <span className='text-primary fs-1 fw-bold '>{journeytimeData?.totalDistance}</span> 
-          <span className='fs-3'> meters</span>
+          <span className='text-primary fs-1 fw-bold '>{(journeytimeData?.totalDistance/1000).toFixed(3)} km</span> 
         </div> 
        </div>
+
        
         {(journeytimeData?.journeyStartTime)?
         <div className='d-flex mb-3 ms-2'>  
@@ -217,11 +217,20 @@ const JourneytimeID= () => {
         <span>end: {new Date(journeytimeData?.journeyEndTime).toLocaleString()}</span>
         </div>:""}
      
+        {(journeytimeData.videoLink && journeytimeData.videoLink!=="")? 
+            <div className='mb-3 ms-2'>
+              Video Link: <a href={journeytimeData.videoLink} target="_blank">{journeytimeData.videoLink}</a>
+            </div>
+            :""}
           <div className='row g-5 gx-xxl-12'>
           <div className='col-xxl-12'>
           <div ref={mapElement} className="mapDiv" />
           </div>
           </div>
+          
+          
+          
+         
         </div>
       </div>
     </>

@@ -44,6 +44,8 @@ import {NewCoordinatesWrapper} from "../pages/coordinates/newCoordinates"
 import {CoordinatesIDWrapper} from "../pages/coordinatesid/coordinatesid"
 import { CoordinatesReportWrapper } from '../pages/coordinatesid/coordinatesreport'
 import { EditCoordinatesWrapper } from '../pages/coordinates/editCoordinates'
+import { EditJourneytimeWrapper } from '../pages/journeytime/editJourneytime'
+
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -71,6 +73,7 @@ const PrivateRoutes = () => {
         <Route path='new-interview' element={<NewInterviewWrapper />} />
         <Route path='edit-interview/:id' element={<EditInterviewWrapper />} />
         <Route path='edit-coordinates/:id' element={<EditCoordinatesWrapper />} />
+        <Route path='edit-journeytime/:id' element={<EditJourneytimeWrapper/>} />
         <Route path='new-geofencing' element={<NewGeofencingWrapper />} />
         <Route path='new-journeytime' element={<NewJourneytimeWrapper />} />
         <Route path='new-coordinates' element={<NewCoordinatesWrapper />} />

@@ -298,12 +298,13 @@ navigator.geolocation.getCurrentPosition((p)=>{
                   console.log(endLocation)
 
                   const totalTime = timer;
+                  const videoLink=""
                  
 
 
                   newJourneytime(values.journeytimeName, values.projectName, values.questions, 
                     getLocations(locationPoints), endLocation, startLocation, 
-                    totalDistance, totalTime, journeyStartTime, journeyEndTime).then(()=>{
+                    totalDistance, totalTime, journeyStartTime, journeyEndTime, videoLink).then(()=>{
                   navigate('/journeytime-page');
                   })
                 }}

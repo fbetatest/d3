@@ -49,6 +49,12 @@ export function newJourneytime(journeytimeName: string, projectName: string,
     return data
   }
   
+
+  export function editJourneytime(vid: number, videoLink: string) {
+    const data = {vid, videoLink}
+  return axios.put(`${SERVER_URL}editjourneytime`, data)
+ 
+  }
   
   export function getAllJourneytime() {
     const data = axios.get(`${SERVER_URL}getalljourneytime`)

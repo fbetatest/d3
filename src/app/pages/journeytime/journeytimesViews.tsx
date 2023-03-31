@@ -105,17 +105,22 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     </td>
 
                     <td className='text-end'>
+                    <Link to={'../edit-journeytime/' + val.created}>
                     <button
                        
-                        className='btn btn-bg-light btn-active-color-primary btn-sm mb-2 fw-bold'
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-2 fw-bold'
                       >
-                       +V
+                     <KTSVG
+                          path='/media/icons/duotune/communication/com008.svg'
+                          className='svg-icon-3'
+                        />
                       </button>
+                      </Link>
                     {(currentUser?.first_name == "Admin Odc")?
                       <button
                         onClick = { () => {deleteJourneytime(val.created); setJourneytimeData(journeytimeData.filter(item => item.created !== val.created))} }
                   
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-5 mb-2'
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-5 mb-2'
                       >
                         <KTSVG
                           path='/media/icons/duotune/general/gen027.svg'
