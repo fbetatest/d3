@@ -3434,6 +3434,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-html5-camera-photo@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.npmjs.org/@types/react-html5-camera-photo/-/react-html5-camera-photo-1.5.1.tgz"
+  integrity sha512-5kJwACiD+fIErQiS6bVD7+d4b9lnECbfWqbDTTAcDyBDRAXDoBEqRCfRjlTYnhNIkkWJA1Ow3s8xCuLKvC1IkQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-table@^7.7.9":
   version "7.7.12"
   resolved "https://registry.npmjs.org/@types/react-table/-/react-table-7.7.12.tgz"
@@ -7818,6 +7825,11 @@ jsesc@~0.5.0:
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-0.5.0.tgz"
   integrity sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA==
 
+jslib-html5-camera-photo@3.3.4:
+  version "3.3.4"
+  resolved "https://registry.npmjs.org/jslib-html5-camera-photo/-/jslib-html5-camera-photo-3.3.4.tgz"
+  integrity sha512-qysjLnP4bud0+g0qs5uA/7i569x+6ID2ufgezf9XQ+BE3EvhYjz177vi9WXLEuq+V6C/WXEv73NUICvHm5VGmQ==
+
 json-parse-even-better-errors@^2.3.0, json-parse-even-better-errors@^2.3.1:
   version "2.3.1"
   resolved "https://registry.npmjs.org/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.1.tgz"
@@ -9637,7 +9649,7 @@ react-dev-utils@^12.0.1:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-react-dom@^18.0.0, react-dom@>=16.14.0, react-dom@>=16.6.0, react-dom@>=16.8, react-dom@18.0.0:
+react-dom@^18.0.0, react-dom@>=16.14.0, react-dom@>=16.6.0, react-dom@>=16.8, react-dom@>=16.8.0, react-dom@18.0.0:
   version "18.0.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.0.0.tgz"
   integrity sha512-XqX7uzmFo0pUceWFCt7Gff6IyIMzFUn7QMZrbrQfGxtaxXZIcGQzoNpRLE3fQLnS4XzLLPMZX2T9TRcSrasicw==
@@ -9664,6 +9676,13 @@ react-geolocated@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npmjs.org/react-geolocated/-/react-geolocated-4.0.3.tgz"
   integrity sha512-p+BObdbWT4kINILkUZtqkWHippBsCLnQ+dyx9Bnd+m3086Xkw7VKWxcFavCd2pG6AM50jsiMJiDu0+DjelnT9g==
+
+react-html5-camera-photo@^1.5.11:
+  version "1.5.11"
+  resolved "https://registry.npmjs.org/react-html5-camera-photo/-/react-html5-camera-photo-1.5.11.tgz"
+  integrity sha512-5OpdW66UmwKwd0ZHvy/U9tEZj19GrcG6RDRXjs1bFBgJoWzLJoJ7YNd8rmdrizV/6go/z9GrwoWMovqCUyaJgQ==
+  dependencies:
+    jslib-html5-camera-photo "3.3.4"
 
 react-inlinesvg@3.0.0:
   version "3.0.0"

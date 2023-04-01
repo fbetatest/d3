@@ -16,6 +16,8 @@ import {Formik, Form, Field, FieldArray} from 'formik'
 import {getProjectNames} from '../projects/core/_requests'
 
 import { useGeolocated } from "react-geolocated";
+import Camera from 'react-html5-camera-photo';
+import 'react-html5-camera-photo/build/css/index.css';
 
 const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
 
@@ -23,6 +25,14 @@ const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API
 
 
 const NewCoordinates = () => {
+
+  const [dataUri, setDataUri] = useState('');
+  const [takePicture, setTakePicture] = useState(false)
+
+  function handleTakePhotoAnimationDone (dataUri) {
+    console.log('takePhoto');
+    setDataUri(dataUri);
+  }
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
   useGeolocated({
@@ -265,6 +275,8 @@ console.log(markerData)
     <>
       <PageTitle breadcrumbs={[]}>Create New Coordinates</PageTitle>
 
+     
+
       <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-800px'>
         <div className='card-body py-3 pt-3 pb-3'>
           <div className='row g-5 gx-xxl-12'>
@@ -335,10 +347,33 @@ console.log(markerData)
                       ) : !isGeolocationEnabled ? (
                           <div>Geolocation is not enabled</div>
                       ) : coords ? (
+                        <>
                         <div>
                            <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={addMarkerToLocation}>Add Current Location</button>
                            <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={LocateMe}>Locate me</button>
                         </div>
+                        
+                        <div>
+                        {!takePicture?<>
+                        <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={()=>setTakePicture(true)}>Camera</button>
+                        
+                        
+                        </>:
+                        <>
+                        <button type="button" className="btn btn-lg btn-danger mb-2 ms-2" onClick={()=>setTakePicture(false)}>Turn off Camera</button>
+                        {
+        (dataUri)
+          ? <img src={dataUri} className="camera-view"
+       
+          />
+          : <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone}
+            isFullscreen={false} className="camera-view"
+          />
+      }
+                        
+                        </>}
+                        </div>
+                        </>
                       ) : (
                           <div>Getting the location data&hellip; </div>
                       )
@@ -346,6 +381,12 @@ console.log(markerData)
                     </span>
                    
                     </div>
+
+
+                  
+              
+
+
 
                    
 
