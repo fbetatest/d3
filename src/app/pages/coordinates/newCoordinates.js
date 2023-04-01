@@ -16,7 +16,7 @@ import {Formik, Form, Field, FieldArray} from 'formik'
 import {getProjectNames} from '../projects/core/_requests'
 
 import { useGeolocated } from "react-geolocated";
-import Camera from 'react-html5-camera-photo';
+import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 
 const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
@@ -30,7 +30,7 @@ const NewCoordinates = () => {
   const [takePicture, setTakePicture] = useState(false)
 
   function handleTakePhotoAnimationDone (dataUri) {
-    console.log('takePhoto');
+    console.log(dataUri);
     setDataUri(dataUri);
   }
 
@@ -367,7 +367,10 @@ console.log(markerData)
        
           />
           : <Camera onTakePhotoAnimationDone = {handleTakePhotoAnimationDone}
-            isFullscreen={false} className="camera-view"
+            isFullscreen={false} 
+            idealFacingMode = {FACING_MODES.ENVIRONMENT}
+            idealResolution = {{width: 640, height: 480}}
+            imageCompression = {0.7}
           />
       }
                         
