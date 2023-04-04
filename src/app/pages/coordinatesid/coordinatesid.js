@@ -2,7 +2,7 @@ import {PageTitle} from '../../../_metronic/layout/core'
 import {useParams} from 'react-router-dom'
 
 
-import {getCoordinates} from '../coordinates/_requests'
+import {getCoordinates, getCoordinatesPoints} from '../coordinates/_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 import {useNavigate} from 'react-router-dom'
 import { useEffect, useState, useRef } from "react";
@@ -29,11 +29,10 @@ const CoordinatesID= () => {
     created: 0,
     vid: 0,
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
-    coordinates: [{lng:0, lat:0, name: ''}]
   })
 
   const [cordinates, setCordinates] = useState([]);
-
+  const [loadingCordinates, setLoadingCordinates] = useState(true)
 
   const mapElement = useRef();
   const [mapLongitude, setMapLongitude] = useState(55.2708);
@@ -71,11 +70,21 @@ const CoordinatesID= () => {
         const {data} = val
         setCoordinatesData(data)
 
-        setCordinates(data.cordinates)
-        data.cordinates.map((v, index) => {
-          displayCordinates(v)
-         });
+
       })
+
+     
+
+      getCoordinatesPoints(vid).then((val) => {
+        console.log("points")
+        const {data} = val
+        setLoadingCordinates(false)
+        setCordinates(data.cordinates)
+       data.cordinates.map((v) => {
+         displayCordinates(v)
+        });
+     
+      });
 
     })
 
@@ -96,6 +105,7 @@ const CoordinatesID= () => {
       <div><strong> ${v.name}</strong></div>
       <div>Latitude: ${parseFloat(v.lat).toFixed(4)}</div>
       <div>Logitude: ${parseFloat(v.lng).toFixed(4)}</div>
+      ${v.image? `<img src=${v.image} class="camera-view"/>` : ""}
       </div>`)
 
       const element = document.createElement('div')
@@ -131,6 +141,9 @@ const CoordinatesID= () => {
           </div>
 
           <div>
+            {(loadingCordinates)?<h1>Loading cordinates...</h1>:<>
+            
+            </>}
           {cordinates.map((val, id) => { 
                       return <div key={id} className="cordinateItem">
                         <strong> {val.name}</strong>{' '}                      

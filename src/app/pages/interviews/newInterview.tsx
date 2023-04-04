@@ -172,7 +172,7 @@ const NewInterview: FC = () => {
                                 </button>
                               </div>
                               <div className='card-footer'>
-                                <button type='submit' className='btn btn-lg btn-primary'>
+                                <button type='submit' className='btn btn-lg btn-primary' disabled={formik.isSubmitting}>
                                   {' '}
                                   Create Interview{' '}
                                   <KTSVG

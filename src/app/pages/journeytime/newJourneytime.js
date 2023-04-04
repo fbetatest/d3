@@ -384,7 +384,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
                     <div ref={mapElement} className="mapDiv" />
 
                     <div className='card-footer'>
-                                <button type='submit' className='btn btn-lg btn-primary'>
+                                <button type='submit' className='btn btn-lg btn-primary' disabled={formik.isSubmitting}>
                                   {' '}
                                   Create Journeytime{' '}
                                   <KTSVG

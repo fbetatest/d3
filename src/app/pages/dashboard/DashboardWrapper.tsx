@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom'
 import {getProjects} from './_requests'
 import { useAuth } from '../../modules/auth'
 import {KTSVG} from '../../../_metronic/helpers'
+
 import {
 
   CardsWidget20,
@@ -26,8 +27,28 @@ const DashboardPage: FC = () => {
     console.log("useEffect")
     getProjects().then(val => {
       const {data} = val;
-      setProjectsData(data);
-      console.log(projectsData);
+      if(currentUser?.first_name == "Admin Odc"){
+
+        setProjectsData(data);
+
+      }
+      else{
+        let projectsDataTemp: any= [];
+
+      data.map((v : any)=>{
+       v.surveyors.map((surveyor : string)=>{
+       if(surveyor==currentUser?.first_name  ){
+        projectsDataTemp.push(v)
+       }
+       })
+      })
+
+
+      setProjectsData(projectsDataTemp);
+    }
+
+      
+    
       
     }
     )

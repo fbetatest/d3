@@ -13,6 +13,8 @@ type Questions = {
     name: string
     lng: number
     lat: number
+    dataUri: string,
+    id: string
   }
 
 export function newCoordinates(coordinatesName: string, projectName: string, questions: Questions[], cordinates: Cordinates[]) {
@@ -60,6 +62,13 @@ export function newCoordinates(coordinatesName: string, projectName: string, que
   export function getAllCoordinates() {
     console.log("get coordinates")
     const data = axios.get(`${SERVER_URL}getallcoordinates`)
+  
+    console.log(data)
+    return data
+  }
+
+  export function getCoordinatesPoints(vid: String) {
+    const data = axios.get(`${SERVER_URL}getcordinatespoints/${vid}`)
   
     console.log(data)
     return data

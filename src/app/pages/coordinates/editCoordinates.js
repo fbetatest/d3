@@ -9,13 +9,15 @@ import "@tomtom-international/web-sdk-maps/dist/maps.css";
 import * as turf from '@turf/turf'
 import "./coordinates.css";
 import {useNavigate} from 'react-router-dom'
-import {getCoordinates, editCoordinates} from './_requests'
+import {getCoordinates, editCoordinates, getCoordinatesPoints} from './_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 
 import {Formik, Form, Field, FieldArray} from 'formik'
 import {getProjectNames} from '../projects/core/_requests'
 
 import { useGeolocated } from "react-geolocated";
+import Camera, {FACING_MODES, IMAGE_TYPES} from 'react-html5-camera-photo'
+import 'react-html5-camera-photo/build/css/index.css'
 
 const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
 
@@ -32,7 +34,7 @@ const EditCoordinates = () => {
   console.log(id)
   const vid = +tempId
 
-
+  const [takePicture, setTakePicture] = useState(false)
   const [coordinatesData, setCoordinatesData] = useState({
     id: 0,
     coordinatesName: 'Loading..',
@@ -40,7 +42,6 @@ const EditCoordinates = () => {
     created: 0,
     vid: 0,
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
-    coordinates: [{lng:0, lat:0, name: ''}]
   })
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
@@ -64,7 +65,7 @@ const EditCoordinates = () => {
   const [map, setMap] = useState({});
   const [cordinates, setCordinates] = useState([])
   const cordinatesRef = useRef(cordinates)
-
+  const [loadingCordinates, setLoadingCordinates] = useState(true)
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
 
@@ -96,12 +97,12 @@ const EditCoordinates = () => {
 
   
 
-  const addCordinateMarker = (lngLat, map) => {
+  const addCordinateMarker = (lngLat, map, img) => {
 
     const id= uuidv4()
     const popup = new tt.Popup(
      popupOptions,
-    ).setHTML(inputPopup(id))
+    ).setHTML(inputPopup(id, img))
 
     
     const element = document.createElement('div')
@@ -127,7 +128,8 @@ const EditCoordinates = () => {
         lng: lngLat.lng,
         lat: lngLat.lat,
         id: id,
-        name: name
+        name: name,
+        dataUri: img
       }
 
       
@@ -140,6 +142,15 @@ const EditCoordinates = () => {
     })
 
   }
+
+  function handleTakePhotoAnimationDone(dataUri) {
+    console.log(dataUri)
+    map.setCenter({lng: coords.longitude, lat: coords.latitude+0.003})
+    addCordinateMarker({lng: coords.longitude, lat: coords.latitude}, map, dataUri)
+    map.setZoom(15)
+    setTakePicture(false)
+  }
+
   const onMarkerSave = (markerData) =>{
     console.log(markerData)
     
@@ -149,12 +160,13 @@ const EditCoordinates = () => {
           markerData.lng.toFixed(4),
           markerData.lat.toFixed(4),
           markerData.name,
-          markerData.id))
+          markerData.id,
+          markerData.dataUri))
           markerData.marker.setPopup(popup).togglePopup();
     
           let coTemp = cordinatesRef.current;
     
-          coTemp.push({id: markerData.id, name: markerData.name, lng:markerData.lng, lat: markerData.lat})
+          coTemp.push({id: markerData.id, name: markerData.name, lng:markerData.lng, lat: markerData.lat, dataUri : markerData.dataUri})
     
          
     
@@ -176,14 +188,14 @@ const EditCoordinates = () => {
     
       }
 
- const inputPopup = (id) =>{ 
+ const inputPopup = (id, dataUri) =>{ 
     return `<div class="form">
     <div class="form__row form__row--compact">
       <label class="form__label">Name 
         <input type="text" id="input-name-${id}" class="form__input">
       </label>
     </div>
-   
+    ${dataUri? `<img src=${dataUri} class="camera-view"/>` : ""}
     <div class="form__row form__row--compact">
       <input type="button" id="save-button-${id}" class="btn-submit btn-submit--save" value="Save">
     </div>
@@ -194,14 +206,14 @@ const EditCoordinates = () => {
 
 }
 
-  function detailsPopup(lng, lat, name, id) {
+  function detailsPopup(lng, lat, name, id, dataUri) {
     return `
       <div class="form">
 
       <div><strong> ${name}</strong></div>
       <div>Latitude: ${parseFloat(lat).toFixed(4)}</div>
       <div>Logitude: ${parseFloat(lng).toFixed(4)}</div>
-
+      ${dataUri? `<img src=${dataUri} class="camera-view"/>` : ""}
        
         <div class="form__row form__row--compact">
           <input type="button" id="remove-${id}" class="btn-submit btn-submit--remove" value="Remove">
@@ -243,15 +255,26 @@ const EditCoordinates = () => {
         created: data.created,
         vid: data.vid,
         questions: data.questions,
-        coordinates: data.coordinates
+     
       })
 
-      data.cordinates.map((v, index) => {
-        displayCordinates(v)
-       });
+    
+
+ 
 
       console.log(data)
 
+    });
+
+    getCoordinatesPoints(vid).then((val) => {
+      console.log("points")
+      const {data} = val
+      setLoadingCordinates(false)
+      setCordinates(data.cordinates)
+      data.cordinates.map((v) => {
+        displayCordinates(v)
+      });
+   
     });
 
 
@@ -303,7 +326,8 @@ const EditCoordinates = () => {
         lng: v.lng,
         lat: v.lat,
         id: v._id,
-        name: v.name
+        name: v.name,
+        dataUri: v.image
       }
 
       map.setCenter({lng: v.lng , lat: v.lat})
@@ -370,6 +394,38 @@ const EditCoordinates = () => {
                         <div>
                         <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={addMarkerToLocation}>Add Current Location</button>
                         <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={LocateMe}>Locate me</button>
+                        <div>
+                              {!takePicture ? (
+                                <>
+                                  <button
+                                    type='button'
+                                    className='btn btn-lg btn-primary mb-2 ms-2'
+                                    onClick={() => setTakePicture(true)}
+                                  >
+                                    Camera
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    type='button'
+                                    className='btn btn-lg btn-danger mb-2 ms-2'
+                                    onClick={() => setTakePicture(false)}
+                                  >
+                                    Turn off Camera
+                                  </button>
+                               
+                                    <Camera
+                                      onTakePhotoAnimationDone={handleTakePhotoAnimationDone}
+                                      isFullscreen={false}
+                                      idealFacingMode={FACING_MODES.ENVIRONMENT}
+                                      idealResolution={{width: 640, height: 480}}
+                                      imageCompression={0.7}
+                                    />
+                               
+                                </>
+                              )}
+                            </div>
                         </div>
                         
                       ) : (
@@ -384,7 +440,7 @@ const EditCoordinates = () => {
 
 
                     <div ref={mapElement} className="mapDiv" />
-
+                    {(loadingCordinates)?<h1>Loading cordinates...</h1>:""}
                     {(cordinates.length > 0)? <>
                     {cordinates.map((val, id) => { 
                       return <div key={id} className="cordinateItem">
@@ -393,10 +449,10 @@ const EditCoordinates = () => {
                         longitude: <strong>{parseFloat(val.lng).toFixed(4)}</strong>{' '}
                         </div>
                     })}
-                    </>:<div className="cordinateItem">Click on the Add Cordinate button to create a Coordinate</div>}
+                    </>:""}
 
                     <div className='card-footer'>
-                                <button type='submit' className='btn btn-lg btn-primary'>
+                                <button type='submit' className='btn btn-lg btn-primary' disabled={formik.isSubmitting}>
                                   {' '}
                                   Save Coordinates{' '}
                                   <KTSVG
