@@ -81,6 +81,7 @@ const CoordinatesID= () => {
         setLoadingCordinates(false)
         setCordinates(data.cordinates)
        data.cordinates.map((v) => {
+        console.log(v.name)
          displayCordinates(v)
         });
      
@@ -123,9 +124,13 @@ const CoordinatesID= () => {
 
         marker.setPopup(popup).togglePopup()
 
+    if(v.image){
+
         document.getElementById(`camera-view-${id}`).addEventListener('click', function () {
-          setCordinateImage(v.image)
-        });
+        setCordinateImage(v.image)
+       });
+
+    }
     }
 
 
