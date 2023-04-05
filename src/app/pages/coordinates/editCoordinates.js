@@ -144,7 +144,6 @@ const EditCoordinates = () => {
   }
 
   function handleTakePhotoAnimationDone(dataUri) {
-    console.log(dataUri)
     map.setCenter({lng: coords.longitude, lat: coords.latitude+0.003})
     addCordinateMarker({lng: coords.longitude, lat: coords.latitude}, map, dataUri)
     map.setZoom(15)

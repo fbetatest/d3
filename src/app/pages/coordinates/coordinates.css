@@ -22,6 +22,19 @@
   }
 
   .camera-view{
-    border-radius:10px;
-    width: 100%;
+    border-radius:5px;
+    max-width: 90px;
+    cursor: pointer;
+    max-height: 70px;
+  }
+
+  .imageDisplay{
+    border-radius:15px;
+    z-index: 1;
+  }
+
+  .imageClose{
+    margin-bottom: -15px;
+    cursor: pointer;
+    z-index:999;
   }

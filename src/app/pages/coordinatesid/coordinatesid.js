@@ -39,7 +39,7 @@ const CoordinatesID= () => {
   const [mapLatitude, setMapLatitude] = useState(25.2048);
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
-
+  const [cordinateImage, setCordinateImage] = useState("")
   
 
   useEffect(() => {
@@ -90,6 +90,8 @@ const CoordinatesID= () => {
 
     function displayCordinates(v){
 
+      const id = uuidv4()
+
       const popupOffset = {
         bottom: [0, -25],
       }
@@ -105,8 +107,9 @@ const CoordinatesID= () => {
       <div><strong> ${v.name}</strong></div>
       <div>Latitude: ${parseFloat(v.lat).toFixed(4)}</div>
       <div>Logitude: ${parseFloat(v.lng).toFixed(4)}</div>
-      ${v.image? `<img src=${v.image} class="camera-view"/>` : ""}
+      ${v.image? `<img src=${v.image} class="camera-view" id="camera-view-${id}"/>` : ""}
       </div>`)
+
 
       const element = document.createElement('div')
       element.className = 'marker'
@@ -119,7 +122,22 @@ const CoordinatesID= () => {
       
 
         marker.setPopup(popup).togglePopup()
+
+        document.getElementById(`camera-view-${id}`).addEventListener('click', function () {
+          setCordinateImage(v.image)
+        });
     }
+
+
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == 'x' ? r : (r & 0x3) | 0x8
+        return v.toString(16)
+      })
+    }
+
+    
 
 
     return () => map.remove();
@@ -140,10 +158,23 @@ const CoordinatesID= () => {
           <div ref={mapElement} className="mapDiv" />       
           </div>
 
+          {(cordinateImage!=="")?<>
           <div>
-            {(loadingCordinates)?<h1>Loading cordinates...</h1>:<>
-            
-            </>}
+            <div>
+            <button className='btn  btn-danger imageClose' onClick={()=>setCordinateImage("")}>
+              <KTSVG
+
+                          path='/media/icons/duotune/general/gen040.svg'
+                          className='svg-icon-2x '
+                        /></button>
+                        </div>
+            <img src={cordinateImage} className="imageDisplay" /></div>
+          </>:<>
+          </>}
+          
+
+          <div>
+            {(loadingCordinates)?<h1>Loading cordinates...</h1>:""}
           {cordinates.map((val, id) => { 
                       return <div key={id} className="cordinateItem">
                         <strong> {val.name}</strong>{' '}                      

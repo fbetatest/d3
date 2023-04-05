@@ -8,6 +8,9 @@ const SidebarMenuMain = () => {
   const intl = useIntl()
   const {currentUser} = useAuth()
   console.log(currentUser?.first_name)
+  const position = currentUser?.position?.toLowerCase();
+  const clientPosition = "client".toLowerCase()
+  console.log(position, clientPosition)
   return (
     <>
       <SidebarMenuItem
@@ -25,7 +28,7 @@ const SidebarMenuMain = () => {
       />
        */}
 
-           
+{(position!== "client".toLowerCase())?  <>       
             <SidebarMenuItem
        to='/reports-page'
    
@@ -77,7 +80,7 @@ const SidebarMenuMain = () => {
         fontIcon='bi-archive'
         icon='/media/icons/duotune/general/gen022.svg'
       />
-      
+      </>:<></>}
        
     
 {(currentUser?.first_name == "Admin Odc")?  
