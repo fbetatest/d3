@@ -14,10 +14,11 @@ type Questions = {
   fieldOptions: string
 }
 
-export function newInterview(interviewName: string, projectName: string, questions: Questions[]) {
+export function newInterview(interviewName: string, projectName: string, surveyorname: string[], questions: Questions[]) {
   let data = {
     interviewName,
     projectName,
+    surveyorname,
     questions,
   }
 
@@ -27,10 +28,11 @@ export function newInterview(interviewName: string, projectName: string, questio
   return axios.put(`${SERVER_URL}newInterview`, data)
 }
 
-export function editInterview(interviewName: string, projectName: string, questions: Questions[], vid: number) {
+export function editInterview(interviewName: string, projectName: string,surveyorname: string[], questions: Questions[], vid: number) {
   let data = {
     interviewName,
     projectName,
+    surveyorname,
     questions,
     vid
   }

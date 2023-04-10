@@ -11,14 +11,36 @@ type Props = {
 
 const TablesWidget11: React.FC<Props> = ({className}) => {
   const [interviewData, setInterviewData] = useState([
-    {id: 0, interviewName: 'Loading..', projectName: '', created: 0, vid:0},
+    {id: 0, interviewName: 'Loading..', projectName: '', surveyorname:[], created: 0, vid:0},
   ])
   const {currentUser} = useAuth()
   useEffect(() => {
     getAllInterview().then((val)=>{
    const {data} = val;
    console.log(data);
+   if(currentUser?.first_name == "Admin Odc"){
    setInterviewData(data)
+   }
+
+   else{
+    let interviewDataTemp: any= [];
+
+  data.map((v : any)=>{
+    if(v.surveyorname.length){
+   v.surveyorname.map((surveyor : string)=>{
+   if(surveyor==currentUser?.first_name  ){
+    interviewDataTemp.push(v)
+   }
+   })
+  }
+  else{
+    interviewDataTemp.push(v)
+  }
+  })
+
+
+  setInterviewData(interviewDataTemp);
+}
     })
     
   }, [])
@@ -84,7 +106,18 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                             className='text-dark fw-bold text-hover-primary mb-1 fs-6'
                           >
                             {val.interviewName}
+
                           </Link>
+                         {val.surveyorname.length?
+                         <div>
+                             {val.surveyorname.map((v, id) => {
+                          return <span className='badge badge-light-warning fs-7 fw-semibold me-2 mt-1' key={id}>
+                            {v}
+                            </span>
+                             
+                        })
+                      }
+                         </div>:<></>} 
                         </div>
                       </div>
                     </td>
@@ -115,10 +148,11 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                           duplicateInterview( iTemp.vid, created)
                         const newInterview = {id: 0, 
                           interviewName: iTemp.interviewName, 
-                          projectName: iTemp.projectName, created: created, vid:created}
+                          projectName: iTemp.projectName,
+                          surveyorname: iTemp.surveyorname, created: created, vid:created}
 
                         
-                        console.log(iTemp);setInterviewData([...interviewData, newInterview]) } }
+                        console.log(iTemp);setInterviewData([ newInterview, ...interviewData]) } }
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1 ms-3'
                       >
                         <KTSVG
