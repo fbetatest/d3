@@ -101,19 +101,27 @@ const CoordinatesID= () => {
 
       const popup = new tt.Popup({
         offset: popupOffset,
-        closeButton: false,
+        closeButton: true,
         closeOnClick: false,
         autoClose: false,
       }).setHTML(`<div>
       <div><strong> ${v.name}</strong></div>
       <div>Latitude: ${parseFloat(v.lat).toFixed(4)}</div>
       <div>Logitude: ${parseFloat(v.lng).toFixed(4)}</div>
-      ${v.image? `<img src=${v.image} class="camera-view" id="camera-view-${id}"/>` : ""}
+      ${v.image? `<img src=${v.image} class="camera-view" id="camera-view-${id}"  >` : ""}
       </div>`)
 
 
+   
+ 
+
       const element = document.createElement('div')
-      element.className = 'marker'
+      element.className = 'tt-icon-number'
+
+      const text = document.createElement('div');
+      text.innerText = (v.name.length>9)? v.name.substring(0,9)+'...': v.name;
+      text.className = 'tt-icon-text'
+      element.appendChild(text);
       const marker = new tt.Marker({
         element: element,
       })
@@ -122,16 +130,22 @@ const CoordinatesID= () => {
 
       
 
-        marker.setPopup(popup).togglePopup()
+        marker.setPopup(popup)
 
     if(v.image){
 
+      popup.on("open", ()=>{ 
         document.getElementById(`camera-view-${id}`).addEventListener('click', function () {
         setCordinateImage(v.image)
-       });
+       });})
+ 
 
+/*
+       
+*/
     }
     }
+
 
 
     function uuidv4() {
