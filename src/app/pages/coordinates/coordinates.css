@@ -7,14 +7,12 @@
   
 
   .marker{
-    background-image: url('cordinate.png');
+    background-image: url('map-pin-icon.png');
     background-size: cover;
-    width: 28px;
-    height: 28px;
-    border-radius:18px;
-    border: solid 2px rgb(0, 126, 235);
-    background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-position: center;
+    width: 20px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0);
     
   }
 
@@ -24,14 +22,12 @@
   }
 
   .displayMarker{
-    background-image: url('cordinate.png');
+    background-image: url('map-pin-icon.png');
     background-size: cover;
-    width: 28px;
-    height: 28px;
-    border-radius:18px;
-    border: solid 2px rgb(0, 126, 235);
-    background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-position: center;
+    width: 22px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0);
   }
   .camera-view{
     border-radius:5px;
@@ -53,14 +49,14 @@
   }
 
   .tt-icon-number {
-    background-image: url('cordinate.png');
+    background-image: url('map-pin-icon.png');
     background-size: cover;
-    width: 28px;
-    height: 28px;
-    border-radius:18px;
-    border: solid 2px rgb(0, 126, 235);
-    background-color: rgba(255, 255, 255, 0.7);
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-position: center;
+    width: 20px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0);
+
+  
   }
 
   .tt-icon-text{
