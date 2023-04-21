@@ -23,11 +23,15 @@ console.log(process.env)
 
 const AppRoutes: FC = () => {
   const {currentUser} = useAuth()
-  console.log(currentUser)
+ 
+  
   return (
     <BrowserRouter basename={PUBLIC_URL}>
       <Routes>
+        
         <Route element={<App />}>
+       
+      
           <Route path='error/*' element={<ErrorsPage />} />
           <Route path='logout' element={<Logout />} />
           {currentUser ? (
@@ -41,7 +45,9 @@ const AppRoutes: FC = () => {
               <Route path='*' element={<Navigate to='/auth' />} />
             </>
           )}
+      
         </Route>
+    
       </Routes>
     </BrowserRouter>
   )

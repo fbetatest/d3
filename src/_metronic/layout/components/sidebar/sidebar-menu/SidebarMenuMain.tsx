@@ -3,8 +3,10 @@
 import {useIntl} from 'react-intl'
 import { useAuth } from '../../../../../app/modules/auth'
 import {SidebarMenuItem} from './SidebarMenuItem'
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SidebarMenuMain = () => {
+
   const intl = useIntl()
   const {currentUser} = useAuth()
   console.log(currentUser?.first_name)
@@ -13,6 +15,7 @@ const SidebarMenuMain = () => {
   console.log(position, clientPosition)
   return (
     <>
+   
       <SidebarMenuItem
         to='/dashboard'
         icon='/media/icons/duotune/art/art002.svg'
