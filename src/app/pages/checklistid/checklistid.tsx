@@ -28,6 +28,8 @@ const ChecklistID: FC = () => {
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
   })
 
+
+
   useEffect(() => {
     console.log('useEffect')
     getChecklist(vid).then((val) => {
@@ -121,10 +123,10 @@ const ChecklistID: FC = () => {
                                       ''
                                     )}
                                     {val.fieldType == 'checkbox' ? (
-                                      <div role='group' aria-labelledby='checkbox-group' className="ms-2">
-                                        {val.fieldOptions.split(',').map((option, i) => {
+                                      <div role='group' aria-labelledby='checkbox-group'>
+                                        {val.fieldOptions.split('#').map((option, i) => {
                                           return  <label key={i}
-                                          className='form-check form-check-sm form-check-custom form-check-solid me-5 mb-3'>
+                                          className='form-check form-check-sm form-check-custom form-check-solid me-5 ms-2 mb-3'>
                                           <Field type="checkbox" 
                                           className='form-check-input me-2'
                                           name={`answers.${index}.fieldOptions`} 
@@ -147,7 +149,7 @@ const ChecklistID: FC = () => {
                     />
 
                     <div className='card-footer'>
-                      <button type='submit' className='btn btn-lg btn-primary'>
+                      <button type='submit' className='btn btn-lg btn-primary' disabled={formik.isSubmitting}>
                         {' '}
                         Submit{' '}
                         <KTSVG

@@ -8,12 +8,13 @@ import {newChecklist} from './_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 
 import {Formik, Form, Field, FieldArray} from 'formik'
-import {getProjectNames} from '../projects/core/_requests'
+import {getProjectNames, getSurveyors} from '../projects/core/_requests'
 
 const NewChecklist: FC = () => {
   const navigate = useNavigate()
 
   const [projectsList, setProjectsList] = useState(['Loading..'])
+  const [surveyorsList, setSurveyorsList] = useState(['Loading..'])
 
   useEffect(() => {
     getProjectNames().then((val) => {
@@ -21,6 +22,14 @@ const NewChecklist: FC = () => {
 
       setProjectsList(data)
     })
+
+    getSurveyors().then((val)=>{
+      const {data} = val;
+
+      setSurveyorsList(data);
+    })
+
+   
   }, [])
 
   return (
@@ -35,12 +44,13 @@ const NewChecklist: FC = () => {
                 initialValues={{
                   checklistName: '',
                   projectName: '',
+                  surveyorName: [],
                   questions: [{fieldName: '', fieldType: 'text', fieldOptions:""}],
                 }}
                 onSubmit={(values) => {
                   console.log(values)
 
-                  newChecklist(values.checklistName, values.projectName, values.questions).then(()=>{
+                  newChecklist(values.checklistName, values.projectName, values.surveyorName, values.questions).then(()=>{
                   navigate('/checklists-page');
                   })
                 }}
@@ -74,6 +84,32 @@ const NewChecklist: FC = () => {
                               <input
                                 type='radio'
                                 name='projectName'
+                                value={name}
+                                className='form-check-input me-1'
+                                onChange={formik.handleChange}
+                              />
+                              {name}
+                            </label>
+                          </label>
+                        )
+                      })}
+                    </div>
+
+                    <label htmlFor='surveyors' className='fw-bold fs-6 mb-2'>
+                        Surveyors
+                    </label>
+
+                    <div role='group' aria-labelledby='my-radio-group mb-4'>
+                      {surveyorsList.map((name, id) => {
+                        return (
+                          <label
+                            key={id}
+                            className='d-flex align-items-center justify-content-between cursor-pointer  '
+                          >
+                            <label className='form-check form-check-sm form-check-custom form-check-solid me-5 mb-3'>
+                              <input
+                                type='checkbox'
+                                name='surveyorName'
                                 value={name}
                                 className='form-check-input me-1'
                                 onChange={formik.handleChange}
@@ -144,7 +180,7 @@ const NewChecklist: FC = () => {
                                       <div className='form-group'>
                                         <Field
                                           type='text'
-                                          placeholder='Enter checkbox options seperated by ,'
+                                          placeholder='Enter checkbox options seperated by #'
                                           className='form-control form-control-lg form-control-solid mb-4'
                                           name={`questions.${index}.fieldOptions`}
                                         />
@@ -172,7 +208,7 @@ const NewChecklist: FC = () => {
                                 </button>
                               </div>
                               <div className='card-footer'>
-                                <button type='submit' className='btn btn-lg btn-primary'>
+                                <button type='submit' className='btn btn-lg btn-primary' disabled={formik.isSubmitting}>
                                   {' '}
                                   Create Checklist{' '}
                                   <KTSVG

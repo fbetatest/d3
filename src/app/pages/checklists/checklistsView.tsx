@@ -3,7 +3,7 @@ import {KTSVG} from '../../../_metronic/helpers'
 import {Link} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import {FC} from 'react'
-import { deleteChecklist, getAllChecklist} from './_requests'
+import { deleteChecklist, duplicateChecklist, getAllChecklist} from './_requests'
 import { useAuth } from '../../modules/auth'
 type Props = {
   className: string
@@ -11,14 +11,36 @@ type Props = {
 
 const TablesWidget11: React.FC<Props> = ({className}) => {
   const [checklistData, setChecklistData] = useState([
-    {id: 0, checklistName: 'Loading..', projectName: '', created: 0},
+    {id: 0, checklistName: 'Loading..', projectName: '', surveyorname:[], created: 0, vid:0},
   ])
   const {currentUser} = useAuth()
   useEffect(() => {
     getAllChecklist().then((val)=>{
    const {data} = val;
    console.log(data);
+   if(currentUser?.first_name == "Admin Odc"){
    setChecklistData(data)
+   }
+
+   else{
+    let checklistDataTemp: any= [];
+
+  data.map((v : any)=>{
+    if(v.surveyorname.length){
+   v.surveyorname.map((surveyor : string)=>{
+   if(surveyor==currentUser?.first_name  ){
+    checklistDataTemp.push(v)
+   }
+   })
+  }
+  else{
+    checklistDataTemp.push(v)
+  }
+  })
+
+
+  setChecklistData(checklistDataTemp);
+}
     })
     
   }, [])
@@ -80,36 +102,82 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                       <div className='d-flex align-items-center'>
                         <div className='d-flex justify-content-start flex-column'>
                           <Link
-                            to={'../checklist/' + val.created}
+                            to={'../checklist/' + val.vid}
                             className='text-dark fw-bold text-hover-primary mb-1 fs-6'
                           >
                             {val.checklistName}
+
                           </Link>
+                         {val.surveyorname.length?
+                         <div>
+                             {val.surveyorname.map((v, id) => {
+                          return <span className='badge badge-light-warning fs-7 fw-semibold me-2 mt-1' key={id}>
+                            {v}
+                            </span>
+                             
+                        })
+                      }
+                         </div>:<></>} 
                         </div>
                       </div>
                     </td>
-                    <td className='mw-150px'> 
+                    <td className="mw-150px">
                       <span className='badge-light-primary fs-7 fw-semibold'>
                         {' '}
                         {val.projectName}
                       </span>
                     </td>
 
-                    <td>
-                      <a
-                        href='#'
-                        className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
+                    <td className="mw-100px">
+                      <span
+                       
+                        className='text-dark fw-bold d-block mb-1 fs-6'
                       >
                         {val.created ? new Date(val.created).toDateString() : ' '}
-                      </a>
+                      </span>
                     </td>
 
                     <td className='text-end'>
-                    {(currentUser?.first_name == "Admin Odc")?
-                      <button
-                        onClick = { () => {deleteChecklist(val.created); setChecklistData(checklistData.filter(item => item.created !== val.created))} }
+
+                    <button
+                      //duplicate button
+                      onClick = { () => {  
+                        
+                        const iTemp=checklistData.filter(item => item.vid == val.vid)[0];
+                        const created = Date.now();
+                          duplicateChecklist( iTemp.vid, created)
+                        const newChecklist = {id: 0, 
+                          checklistName: iTemp.checklistName, 
+                          projectName: iTemp.projectName,
+                          surveyorname: iTemp.surveyorname, created: created, vid:created}
+
+                        
+                        console.log(iTemp);setChecklistData([ newChecklist, ...checklistData]) } }
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1 ms-3'
+                      >
+                        <KTSVG
+                          path='/media/icons/duotune/arrows/arr013.svg'
+                          className='svg-icon-3'
+                          
+                        />
+                      </button>
+                    <Link to={'../edit-checklist/' + val.vid}>
+                    <button
+                      //edit button
                   
-                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm mb-1 ms-3'
+                      >
+                        <KTSVG
+                          path='/media/icons/duotune/general/gen055.svg'
+                          className='svg-icon-3'
+                        />
+                      </button>
+                      </Link>
+                      {(currentUser?.first_name == "Admin Odc")?
+                      <button
+                        onClick = { () => {deleteChecklist(val.vid); setChecklistData(checklistData.filter(item => item.vid !== val.vid))} }
+                  
+                        className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                       >
                         <KTSVG
                           path='/media/icons/duotune/general/gen027.svg'
@@ -117,6 +185,8 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                         />
                       </button>:""
                 }
+
+                     
                     </td>
                   </tr>
                 )

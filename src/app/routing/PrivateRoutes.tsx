@@ -20,7 +20,7 @@ import {TicketsraisedWrapper} from "../pages/ticketsraised/ticketsraised"
 import {ChecklistIDWrapper} from "../pages/checklistid/checklistid"
 import {ProjectsIDWrapper} from "../pages/projects/projectsid/projectsid"
 import { ChecklistReportWrapper } from '../pages/checklistid/checklistreport'
-
+import {EditChecklistWrapper} from "../pages/checklists/editchecklist"
 import {NewInterviewWrapper} from "../pages/interviews/newInterview"
 import {InterviewIDWrapper} from "../pages/interviewid/interviewid"
 import {EditInterviewWrapper} from "../pages/interviews/editinterview"
@@ -72,6 +72,7 @@ const PrivateRoutes = () => {
         <Route path='new-checklist' element={<NewChecklistWrapper />} />
         <Route path='new-interview' element={<NewInterviewWrapper />} />
         <Route path='edit-interview/:id' element={<EditInterviewWrapper />} />
+        <Route path='edit-checklist/:id' element={<EditChecklistWrapper />} />
         <Route path='edit-coordinates/:id' element={<EditCoordinatesWrapper />} />
         <Route path='edit-journeytime/:id' element={<EditJourneytimeWrapper/>} />
         <Route path='new-geofencing' element={<NewGeofencingWrapper />} />

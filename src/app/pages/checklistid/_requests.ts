@@ -29,6 +29,10 @@ export function saveChecklistData(checklistName: string, checklistVid: Number, p
 
 }
 
+export function deleteChecklistData(id: string){
+  return axios.delete(`${SERVER_URL}deleteChecklistdata/${id}`)
+}
+
 export function getChecklistData(vid: number) {
   const data = axios.get(`${SERVER_URL}getchecklistdata/${vid}`)
 
