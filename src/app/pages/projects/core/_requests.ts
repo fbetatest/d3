@@ -21,6 +21,19 @@ export function createProject (projectName: string, projectDescription: string, 
 
   }
 
+  export function editProject(projectName: string,projectDescription: string, surveyors: string[], tasks: string[], vid: number )
+  {
+    let data = {
+      projectName, 
+      projectDescription,
+      surveyors,
+      tasks,
+      vid
+  };
+
+console.log(data);
+return  axios.put(`${SERVER_URL}editproject`,data)
+  }
 
   export function  getSurveyors () {
 
