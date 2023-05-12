@@ -69,18 +69,37 @@ const EditCoordinates = () => {
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
 
-  const addMarkerToLocation = ()=>{
-   
-    console.log(coords);
-
-    addCordinateMarker({lng: coords.longitude , lat: coords.latitude}, map)
-    map.setCenter({lng: coords.longitude , lat: coords.latitude})
-  
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
   }
 
-  const LocateMe = ()=>{
-    console.log(coords);
-    map.setCenter({lng: coords.longitude , lat: coords.latitude});
+  const addMarkerToLocation = () => {
+
+    navigator.geolocation.getCurrentPosition((p)=>{
+
+      addCordinateMarker({lng: p.coords.longitude, lat: p.coords.latitude}, map)
+
+      map.setCenter({lng: p.coords.longitude, lat: p.coords.latitude})
+
+    }, error, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    });
+   
+
+   
+  }
+
+  const LocateMe = () => {
+    navigator.geolocation.getCurrentPosition((p)=>{
+
+    map.setCenter({lng: p.coords.longitude, lat: p.coords.latitude})
+  }, error, {
+    enableHighAccuracy: true,
+    timeout: 20000,
+    maximumAge: 0,
+  });
   }
 
 

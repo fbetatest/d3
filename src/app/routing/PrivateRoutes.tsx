@@ -9,6 +9,7 @@ import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 import {ProjectsWrapper} from "../pages/projects/projectsPage"
 import {NewProjectWrapper} from "../pages/projects/newProjectPage"
+import {EditProjectWrapper} from "../pages/projects/editProjectPage"
 import {ReportWrapper} from "../pages/reports/reportsPage"
 import {InterviewsWrapper} from "../pages/interviews/interviews"
 import {ChecklistsWrapper} from "../pages/checklists/checklists"
@@ -69,6 +70,7 @@ const PrivateRoutes = () => {
 
 
         <Route path='new-project' element={<NewProjectWrapper />} />
+        <Route path='edit-project/:id' element={<EditProjectWrapper />} />
         <Route path='new-checklist' element={<NewChecklistWrapper />} />
         <Route path='new-interview' element={<NewInterviewWrapper />} />
         <Route path='edit-interview/:id' element={<EditInterviewWrapper />} />

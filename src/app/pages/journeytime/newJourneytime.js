@@ -158,7 +158,11 @@ navigator.geolocation.getCurrentPosition((p)=>{
 
         }
      
-       }, error, options);
+       }, error, {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 0,
+      });
      
       }
           
@@ -166,7 +170,11 @@ navigator.geolocation.getCurrentPosition((p)=>{
       setTimer(tempTimer);
     }, 1000);
 
-  }, error, options);
+  }, error, {
+    enableHighAccuracy: true,
+    timeout: 20000,
+    maximumAge: 0,
+  });
    
   }
 
@@ -187,7 +195,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
     setJourneyEndTime(Date.now())
     setStartJourney(false)
     clearInterval(tick.current);
-    console.log(options)
+   
 
 
     navigator.geolocation.getCurrentPosition((position)=>{
@@ -226,7 +234,11 @@ navigator.geolocation.getCurrentPosition((p)=>{
           }
       });
       })
-     }, error, options);
+     }, error, {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 0,
+    });
   
   }
 

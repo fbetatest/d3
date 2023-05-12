@@ -44,9 +44,23 @@ const NewCoordinates = () => {
   const cordinatesRef = useRef(cordinates)
   const [projectsList, setProjectsList] = useState(['Loading..'])
 
+ 
+  
+  
+  
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+
   const LocateMe = () => {
-    console.log(coords)
-    map.setCenter({lng: coords.longitude, lat: coords.latitude})
+    navigator.geolocation.getCurrentPosition((p)=>{
+
+    map.setCenter({lng: p.coords.longitude, lat: p.coords.latitude})
+  }, error, {
+    enableHighAccuracy: true,
+    timeout: 20000,
+    maximumAge: 0,
+  });
   }
 
   const popupOptions = {
@@ -96,11 +110,19 @@ const NewCoordinates = () => {
 
 
   function handleTakePhotoAnimationDone(dataUri) {
+    navigator.geolocation.getCurrentPosition((p)=>{
 
-    map.setCenter({lng: coords.longitude, lat: coords.latitude+0.003})
-    addCordinateMarker({lng: coords.longitude, lat: coords.latitude}, map, dataUri)
-    map.setZoom(15)
-    setTakePicture(false)
+      map.setCenter({lng: p.coords.longitude, lat: p.coords.latitude+0.003})
+      addCordinateMarker({lng: p.coords.longitude, lat: p.coords.latitude}, map, dataUri)
+      map.setZoom(15)
+      setTakePicture(false)
+    }, error, {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 0,
+    });
+
+   
   }
 
   const onMarkerSave = (markerData) => {
@@ -183,12 +205,24 @@ const NewCoordinates = () => {
     })
   }
 
+ 
+
   const addMarkerToLocation = () => {
-    console.log(coords)
 
-    addCordinateMarker({lng: coords.longitude, lat: coords.latitude}, map)
+    navigator.geolocation.getCurrentPosition((p)=>{
 
-    map.setCenter({lng: coords.longitude, lat: coords.latitude})
+      addCordinateMarker({lng: p.coords.longitude, lat: p.coords.latitude}, map)
+
+      map.setCenter({lng: p.coords.longitude, lat: p.coords.latitude})
+
+    }, error, {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    });
+   
+
+   
   }
 
   useEffect(() => {
