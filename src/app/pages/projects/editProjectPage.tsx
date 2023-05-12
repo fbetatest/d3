@@ -88,7 +88,7 @@ const EditProject: FC = () => {
                   onSubmit={(values) => {
                     console.log(values)
                     editProject(projectsData.projectName, projectsData.projectDescription,
-                        values.surveyors, values.tasks, projectsData.vid)
+                        values.surveyors, values.tasks, projectsData.vid).then(()=>navigate('/'))
                
                   }}
                 >
