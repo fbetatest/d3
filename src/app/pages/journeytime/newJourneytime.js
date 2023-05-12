@@ -137,7 +137,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
        navigator.geolocation.getCurrentPosition((position)=>{
 
         
-        const lngLatDiff= 0.0003;
+        const lngLatDiff= 0.0002;
         const lngDiff = Math.abs(lastMarker.longitude-position.coords.longitude)
         const latDiff = Math.abs(lastMarker.latitude-position.coords.latitude)
 
@@ -160,7 +160,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
      
        }, error, {
         enableHighAccuracy: true,
-        timeout: 20000,
+        timeout: 10000,
         maximumAge: 0,
       });
      
@@ -172,7 +172,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
 
   }, error, {
     enableHighAccuracy: true,
-    timeout: 20000,
+    timeout: 10000,
     maximumAge: 0,
   });
    
