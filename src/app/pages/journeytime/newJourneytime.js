@@ -379,7 +379,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
                             <button type="button" className="btn btn-lg btn-danger mb-2 ms-2" onClick={stopJourneyTime}>Stop Journey Time</button>      
                            <h1 className='ms-3 mt-3 display-3'>{timer}s</h1>     
                           </>:<>
-                          <button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={startJourneyTime}>Start Journey Time</button>      
+                          {(journeyStartTime==0)?<button type="button" className="btn btn-lg btn-primary mb-2 ms-2" onClick={startJourneyTime}>Start Journey Time</button>  :'' }    
                            <h1 className='ms-3 mt-3 display-3'>{timer}s</h1>     
                           </>}
                                    
