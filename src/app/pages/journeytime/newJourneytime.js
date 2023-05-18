@@ -236,7 +236,7 @@ navigator.geolocation.getCurrentPosition((p)=>{
       })
      }, error, {
       enableHighAccuracy: true,
-      timeout: 20000,
+      timeout: 10000,
       maximumAge: 0,
     });
   

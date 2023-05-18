@@ -74,6 +74,7 @@ const JourneytimeID= () => {
       center: [mapLongitude, mapLatitude],
       zoom: mapZoom,
       language: "en-GB",
+      style:`https://api.tomtom.com/style/1/style/*?map=2/basic_street-satellite&poi=2/poi_dynamic-satellite&key=${tomtom_api_key}`
     });
     map.addControl(new tt.FullscreenControl());
     map.addControl(new tt.NavigationControl());
