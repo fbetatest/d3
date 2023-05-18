@@ -108,7 +108,7 @@ const JourneytimeID= () => {
         
         resultStr+=v+":"
         const markerP = v.split(",")
-      //  addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
+        addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
         
         
       })
