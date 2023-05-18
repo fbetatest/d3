@@ -144,7 +144,7 @@ const JourneytimeID= () => {
               'data': geojson
           },
           'paint': {
-              'line-color': '#2faaff',
+              'line-color': 'rgba(0,150,250,0.7)',
               'line-width': 5
           }
       });
