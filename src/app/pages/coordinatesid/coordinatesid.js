@@ -40,7 +40,7 @@ const CoordinatesID= () => {
   const [mapZoom, setMapZoom] = useState(13);
   const [map, setMap] = useState({});
   const [cordinateImage, setCordinateImage] = useState("")
-  
+  const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
 
   useEffect(() => {
 
@@ -58,6 +58,7 @@ const CoordinatesID= () => {
       center: [mapLongitude, mapLatitude],
       zoom: 12,
       language: "en-GB",
+      style:`https://api.tomtom.com/style/1/style/*?map=2/basic_street-satellite&poi=2/poi_dynamic-satellite&key=${tomtom_api_key}`
     });
 
     map.addControl(new tt.FullscreenControl());

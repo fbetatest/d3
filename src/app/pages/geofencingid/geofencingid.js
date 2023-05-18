@@ -48,6 +48,8 @@ const GeofencingID= () => {
   const [map, setMap] = useState({});
 
 
+  const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
+
 
   useEffect(() => {
 
@@ -66,7 +68,8 @@ const GeofencingID= () => {
       container: mapElement.current,
       center: [mapLongitude, mapLatitude],
       zoom: mapZoom,
-      language: "en-GB",
+      language: "en-GB",  
+      style:`https://api.tomtom.com/style/1/style/*?map=2/basic_street-satellite&poi=2/poi_dynamic-satellite&key=${tomtom_api_key}`
     });
 
     map.addControl(new tt.FullscreenControl())
