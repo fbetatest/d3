@@ -168,19 +168,29 @@ const CoordinatesID= () => {
 
 
 const downloadCordinates = () => {
-  const geoJsonData = {
-    "type": "FeatureCollection",
-    "features": [{
+
+  let features = [];
+
+  cordinates.map((val, id) => { 
+    features.push(   {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [102.0, 0.5]
+        "coordinates": [val.lng, val.lat]
       },
       "properties": {
-        "name": " Islands"
+        "name": val.name
       }
-    }]
+    })
+console.table(val.name, val.lng, val.lat)
+  }) 
+
+  const geoJsonData = {
+    "type": "FeatureCollection",
+    "features": features
   };
+
+  console.log(...features, geoJsonData)
   
   const kmlData = tokml(geoJsonData);
   console.log(kmlData);
@@ -188,7 +198,7 @@ const downloadCordinates = () => {
   const element = document.createElement("a");
     const file = new Blob([kmlData], {type: 'text/kml'});
     element.href = URL.createObjectURL(file);
-    element.download = "myFile.kml";
+    element.download = `${coordinatesData.projectName}.kml`;
     document.body.appendChild(element); // Required for this to work in FireFox
     element.click();
 
