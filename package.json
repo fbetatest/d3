@@ -40,6 +40,7 @@
     "react-topbar-progress-indicator": "4.1.1",
     "sass": "1.50.1",
     "socicon": "3.0.5",
+    "tokml": "^0.4.0",
     "xlsx": "^0.18.5",
     "yup": "0.32.11"
   },

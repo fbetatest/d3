@@ -11,6 +11,7 @@ import * as tt from "@tomtom-international/web-sdk-maps";
 import "@tomtom-international/web-sdk-maps/dist/maps.css";
 import * as turf from '@turf/turf'
 import "./coordinates.css";
+import tokml from 'tokml';
 
 const CoordinatesID= () => {
   const navigate = useNavigate();
@@ -157,6 +158,8 @@ const CoordinatesID= () => {
       })
     }
 
+
+
     
 
 
@@ -164,13 +167,45 @@ const CoordinatesID= () => {
   }, []);
 
 
+const downloadCordinates = () => {
+  const geoJsonData = {
+    "type": "FeatureCollection",
+    "features": [{
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [102.0, 0.5]
+      },
+      "properties": {
+        "name": " Islands"
+      }
+    }]
+  };
+  
+  const kmlData = tokml(geoJsonData);
+  console.log(kmlData);
+  
+  const element = document.createElement("a");
+    const file = new Blob([kmlData], {type: 'text/kml'});
+    element.href = URL.createObjectURL(file);
+    element.download = "myFile.kml";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
 
+    
+}
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{coordinatesData.coordinatesName}</PageTitle>
       <div className='fw-semibold fs-6 mb-2'>Project: {coordinatesData.projectName}</div>
-
+      <button
+                                type='button'
+                                className='btn btn-lg btn-primary mb-2 ms-2'
+                                onClick={downloadCordinates}
+                              >
+                                Download Cordinates
+                              </button>
       <div className='card card-xxl-stretch mb-5 mb-xxl-8'>
         <div className='card-body py-3'>
           <div className='row g-5 gx-xxl-12'>
