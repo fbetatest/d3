@@ -205,10 +205,7 @@ const JourneytimeID= () => {
           <span className='text-primary fs-1 fw-bold '>{Math.floor(journeytimeData?.totalTime / 60)}m {journeytimeData?.totalTime%60}s</span> 
         </div> 
 
-        <div className=''>
-          <div className='fs-3'>Total Distance </div> 
-          <span className='text-primary fs-1 fw-bold '>{(journeytimeData?.totalDistance/1000).toFixed(3)} km</span> 
-        </div> 
+     
        </div>
 
        
