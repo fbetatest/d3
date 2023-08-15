@@ -43,6 +43,9 @@ const JourneytimeID= () => {
     videoLink:""
   })
 
+  const [totalDistance, setTotalDistance] = useState(null);
+
+
   
 
 
@@ -132,6 +135,8 @@ const JourneytimeID= () => {
       }).then((response)=>{
         var geojson = response.toGeoJson();
         console.log(geojson)
+       
+       setTotalDistance(geojson.features[0].properties.summary.lengthInMeters/1000)
         const startMarker = geojson.features[0].geometry.coordinates[0];
         addMarker(startMarker[0], startMarker[1], "start-marker")
         const endMarker = geojson.features[0].geometry.coordinates[geojson.features[0].properties.sections[0].endPointIndex];
@@ -201,8 +206,17 @@ const JourneytimeID= () => {
         <div className='card-body py-3'>
           <div className='d-flex mb-3 ms-2'>
           <div className='me-5'>
-          <div className='fs-3'>Journey Time </div> 
-          <span className='text-primary fs-1 fw-bold '>{Math.floor(journeytimeData?.totalTime / 60)}m {journeytimeData?.totalTime%60}s</span> 
+       
+            <div className='fs-3'>Journey Time </div> 
+            <span className='text-primary fs-1 fw-bold '>{Math.floor(journeytimeData?.totalTime / 60)}m {journeytimeData?.totalTime%60}s</span> 
+
+            <div className='fs-3'>Total Distance </div> 
+            <span className='text-primary fs-1 fw-bold '>{totalDistance}km</span>
+            <div>
+
+
+            </div>
+       
         </div> 
 
      
