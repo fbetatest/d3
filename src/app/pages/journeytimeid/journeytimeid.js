@@ -129,72 +129,50 @@ const JourneytimeID = () => {
               geojson.features[0].properties.sections[0].endPointIndex
             ]
           addMarker(endMarker[0], endMarker[1], 'end-marker')
+
+          let lineCordinates= [];
+         console.log(locationArr.length)
+         locationArr.map((v, i) => {
+          const markerP = v.split(',');
+          lineCordinates.push([markerP[0], markerP[1]])
+         });
+
        
-                const result = [
-                    [
-                      [
-                        55.33240383467671,
-                        25.2562358900678
-                      ],
-                      [
-                        55.33508194767137,
-                        25.255756790693567
-                      ],
-                      [
-                        55.334571830910846,
-                        25.253325775853412
-                      ],
-                      [
-                        55.33375760608129,
-                        25.25350322383791
-                      ],
-                      [
-                        55.33205067691961,
-                        25.254700990955257
-                      ],
-                      [
-                        55.33237440486394,
-                        25.25625363445262
-                      ],
-                      [
-                        55.33240383467671,
-                        25.2562358900678
-                      ]
-                    ]
-                  ]
-                
-
-
+       
           map.addLayer({
-            id: 'Fence ',
-            type: 'fill',
-            source: {
-              type: 'geojson',
-              data: result,
+            'id': '123',
+            'type': 'line',
+            'source': {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': [
+                        {
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'LineString',
+                                'properties': {},
+                                'coordinates': lineCordinates
+                            }
+                        }
+                    ]
+                }
             },
-            paint: {
-              'fill-color': 'purple',
-              'fill-opacity': 0.6,
+            'layout': {
+                'line-cap': 'round',
+                'line-join': 'round'
             },
-          })
+            'paint': {
+                'line-color': 'blue',
+                'line-width': 4
+            }
+    });      
 
-          /*
-        map.addLayer({
-          'id': 'route',
-          'type': 'line',
-          'source': {
-              'type': 'geojson',
-              'data': geojson
-          },
-          'paint': {
-              'line-color': 'rgba(0,150,250,0.7)',
-              'line-width': 5
-          }
-      });
-
-      */
+          
         })
     }
+
+    
 
     function addMarker(lng, lat, elementName) {
       const element = document.createElement('div')
