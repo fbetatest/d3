@@ -1,23 +1,23 @@
 import {PageTitle} from '../../../_metronic/layout/core'
 import {useParams} from 'react-router-dom'
-import "./journeytime.css";
+import './journeytime.css'
 
 import {getJourneytime} from '../journeytime/_requests'
 import {KTSVG} from '../../../_metronic/helpers'
 import {useNavigate} from 'react-router-dom'
-import { useEffect, useState, useRef } from "react";
-import * as tt from "@tomtom-international/web-sdk-maps";
+import {useEffect, useState, useRef} from 'react'
+import * as tt from '@tomtom-international/web-sdk-maps'
 // styles
-import "@tomtom-international/web-sdk-maps/dist/maps.css";
-import ttservices from "@tomtom-international/web-sdk-services";
+import '@tomtom-international/web-sdk-maps/dist/maps.css'
+import ttservices from '@tomtom-international/web-sdk-services'
 import {Link} from 'react-router-dom'
 import * as turf from '@turf/turf'
-import "./journeytime.css";
+import './journeytime.css'
 
-const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API 
+const tomtom_api_key = process.env.REACT_APP_SERVER_TOMTOM_API
 
-const JourneytimeID= () => {
-  const navigate = useNavigate();
+const JourneytimeID = () => {
+  const navigate = useNavigate()
   const {id} = useParams()
   console.log(id)
 
@@ -33,32 +33,25 @@ const JourneytimeID= () => {
     created: 0,
     vid: 0,
     questions: [{fieldName: '', fieldType: '', fieldOptions: ''}],
-    locationPoints:"",
-    startLocation:"",
-    endLocation:"",
+    locationPoints: '',
+    startLocation: '',
+    endLocation: '',
     totalTime: 0,
-    totalDistance:0,
+    totalDistance: 0,
     journeyStartTime: 0,
-    journeyEndTime:0,
-    videoLink:""
+    journeyEndTime: 0,
+    videoLink: '',
   })
 
-  const [totalDistance, setTotalDistance] = useState(null);
+  const [totalDistance, setTotalDistance] = useState(null)
 
-
-  
-
-
-  const mapElement = useRef();
-  const [mapLongitude, setMapLongitude] = useState(55.2708);
-  const [mapLatitude, setMapLatitude] = useState(25.2048);
-  const [mapZoom, setMapZoom] = useState(13.6);
-  const [map, setMap] = useState({});
-
-  
+  const mapElement = useRef()
+  const [mapLongitude, setMapLongitude] = useState(55.2708)
+  const [mapLatitude, setMapLatitude] = useState(25.2048)
+  const [mapZoom, setMapZoom] = useState(13.6)
+  const [map, setMap] = useState({})
 
   useEffect(() => {
-
     console.log('useEffect')
     getJourneytime(vid).then((val) => {
       const {data} = val
@@ -66,81 +59,126 @@ const JourneytimeID= () => {
       console.log(data)
     })
 
-
     let map = tt.map({
       /* 
       This key will API key only works on this Stackblitz. To use this code in your own project,
       sign up for an API key on the TomTom Developer Portal.
       */
-      key: "jGLOAW8p4cm75mgVAHfwDjDADWQo4iOs",
+      key: 'jGLOAW8p4cm75mgVAHfwDjDADWQo4iOs',
       container: mapElement.current,
       center: [mapLongitude, mapLatitude],
       zoom: mapZoom,
-      language: "en-GB",
-      style:`https://api.tomtom.com/style/1/style/*?map=2/basic_street-satellite&poi=2/poi_dynamic-satellite&key=${tomtom_api_key}`
-    });
-    map.addControl(new tt.FullscreenControl());
-    map.addControl(new tt.NavigationControl());
-    setMap(map);
+      language: 'en-GB',
+      style: `https://api.tomtom.com/style/1/style/*?map=2/basic_street-satellite&poi=2/poi_dynamic-satellite&key=${tomtom_api_key}`,
+    })
+    map.addControl(new tt.FullscreenControl())
+    map.addControl(new tt.NavigationControl())
+    setMap(map)
 
+    return () => map.remove()
+  }, [])
 
-
-    return () => map.remove();
-  }, []);
-
-  
   useEffect(() => {
+    if (journeytimeData.startLocation !== '') {
+      let locationArr = journeytimeData.locationPoints.split(':')
 
-    
-    if(journeytimeData.startLocation!==""){
-
-
-      const locationArr = journeytimeData.locationPoints.split(":")
       console.log(locationArr)
-     const locationStart = journeytimeData.startLocation.split(",")
-     console.log(locationStart)
-    const locationEnd= journeytimeData.endLocation.split(",")
-    //  addMarker(locationStart[0], locationStart[1], "start-marker")
-     map.setCenter({lng: parseFloat(locationStart[0]) , lat: parseFloat(locationStart[1])});
-  
+
+      let locationStart = journeytimeData.startLocation.split(',')
+      console.log(locationStart)
+      let locationEnd = locationArr[locationArr.length - 1].split(',')
+
+      locationStart = locationArr[0].split(',')
+      locationEnd = locationArr[locationArr.length - 1].split(',')
       console.log(locationStart)
       console.log(locationEnd)
-      const supportingPoints = ()=>{ 
-        let resultStr=""; 
-        
-      locationArr.map((v,i)=>{
-        
-        resultStr+=v+":"
-        const markerP = v.split(",")
-        addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
-        
-        
-      })
 
-      resultStr = resultStr.substring(0, resultStr.length - 1);
+      //  addMarker(locationStart[0], locationStart[1], "start-marker")
+      map.setCenter({lng: parseFloat(locationStart[0]), lat: parseFloat(locationStart[1])})
+
+      const supportingPoints = () => {
+        let resultStr = ''
+
+        locationArr.map((v, i) => {
+          resultStr += v + ':'
+          const markerP = v.split(',')
+          addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
+        })
+
+        resultStr = resultStr.substring(0, resultStr.length - 1)
         console.log(resultStr)
-      return resultStr
-      
-
-
+        return resultStr
       }
 
+      ttservices.services
+        .calculateRoute({
+          key: tomtom_api_key,
+          traffic: false,
+          locations: locationStart.join() + ':' + locationEnd.join(),
+          supportingPoints: locationArr.length > 1 ? supportingPoints() : undefined,
+        })
+        .then((response) => {
+          var geojson = response.toGeoJson()
+          console.log(geojson)
 
-      ttservices.services.calculateRoute({
-        key: tomtom_api_key,
-        traffic: false,
-        locations: locationStart.join() + ':' + locationEnd.join(),
-        supportingPoints: (locationArr.length>1)? supportingPoints():undefined,
-   
-      }).then((response)=>{
-        var geojson = response.toGeoJson();
-        console.log(geojson)
+          setTotalDistance(geojson.features[0].properties.summary.lengthInMeters / 1000)
+          const startMarker = geojson.features[0].geometry.coordinates[0]
+          addMarker(startMarker[0], startMarker[1], 'start-marker')
+          const endMarker =
+            geojson.features[0].geometry.coordinates[
+              geojson.features[0].properties.sections[0].endPointIndex
+            ]
+          addMarker(endMarker[0], endMarker[1], 'end-marker')
        
-       setTotalDistance(geojson.features[0].properties.summary.lengthInMeters/1000)
-        const startMarker = geojson.features[0].geometry.coordinates[0];
-        addMarker(startMarker[0], startMarker[1], "start-marker")
-        const endMarker = geojson.features[0].geometry.coordinates[geojson.features[0].properties.sections[0].endPointIndex];
-        addMarker(endMarker[0], endMarker[1], "end-marker")
+                const result = [
+                    [
+                      [
+                        55.33240383467671,
+                        25.2562358900678
+                      ],
+                      [
+                        55.33508194767137,
+                        25.255756790693567
+                      ],
+                      [
+                        55.334571830910846,
+                        25.253325775853412
+                      ],
+                      [
+                        55.33375760608129,
+                        25.25350322383791
+                      ],
+                      [
+                        55.33205067691961,
+                        25.254700990955257
+                      ],
+                      [
+                        55.33237440486394,
+                        25.25625363445262
+                      ],
+                      [
+                        55.33240383467671,
+                        25.2562358900678
+                      ]
+                    ]
+                  ]
+                
+
+
+          map.addLayer({
+            id: 'Fence ',
+            type: 'fill',
+            source: {
+              type: 'geojson',
+              data: result,
+            },
+            paint: {
+              'fill-color': 'purple',
+              'fill-opacity': 0.6,
+            },
+          })
+
+          /*
         map.addLayer({
           'id': 'route',
           'type': 'line',
@@ -153,96 +191,84 @@ const JourneytimeID= () => {
               'line-width': 5
           }
       });
-      })
 
-
+      */
+        })
     }
 
-    function addMarker(lng, lat, elementName){
-
+    function addMarker(lng, lat, elementName) {
       const element = document.createElement('div')
       element.className = elementName
-  
+
       new tt.Marker({
         element: element,
       })
         .setLngLat({lng, lat})
         .addTo(map)
-  
     }
 
-
-    function addMarkerWnumber(lng, lat, elementName, index){
-
+    function addMarkerWnumber(lng, lat, elementName, index) {
       const element = document.createElement('div')
       element.className = elementName
 
-      var number = document.createElement('div');
-                number.innerText = index;
-                element.appendChild(number);
-  
+      var number = document.createElement('div')
+      number.innerText = index
+      element.appendChild(number)
+
       new tt.Marker({
         element: element,
       })
         .setLngLat({lng, lat})
         .addTo(map)
-  
     }
-
   }, [journeytimeData.startLocation])
-
-
-
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{journeytimeData.journeytimeName}</PageTitle>
       <div className='fw-semibold fs-6 mb-2'>Project: {journeytimeData.projectName}</div>
-      
-     
-    
-       
+
       <div className='card card-xxl-stretch mb-5 mb-xxl-8 mw-1200px'>
         <div className='card-body py-3'>
           <div className='d-flex mb-3 ms-2'>
-          <div className='me-5'>
-       
-            <div className='fs-3'>Journey Time </div> 
-            <span className='text-primary fs-1 fw-bold '>{Math.floor(journeytimeData?.totalTime / 60)}m {journeytimeData?.totalTime%60}s</span> 
+            <div className='me-5'>
+              <div className='fs-3'>Journey Time </div>
+              <span className='text-primary fs-1 fw-bold '>
+                {Math.floor(journeytimeData?.totalTime / 60)}m {journeytimeData?.totalTime % 60}s
+              </span>
 
-            <div className='fs-3'>Total Distance </div> 
-            <span className='text-primary fs-1 fw-bold '>{totalDistance}km</span>
-            <div>
-
-
+              <div className='fs-3'>Total Distance </div>
+              <span className='text-primary fs-1 fw-bold '>{totalDistance}km</span>
+              <div></div>
             </div>
-       
-        </div> 
+          </div>
 
-     
-       </div>
+          {journeytimeData?.journeyStartTime ? (
+            <div className='d-flex mb-3 ms-2'>
+              <span className='me-3'>
+                start: {new Date(journeytimeData?.journeyStartTime).toLocaleString()}
+              </span>
+              <span>end: {new Date(journeytimeData?.journeyEndTime).toLocaleString()}</span>
+            </div>
+          ) : (
+            ''
+          )}
 
-       
-        {(journeytimeData?.journeyStartTime)?
-        <div className='d-flex mb-3 ms-2'>  
-        <span className="me-3">start: {new Date(journeytimeData?.journeyStartTime).toLocaleString()}</span>
-        <span>end: {new Date(journeytimeData?.journeyEndTime).toLocaleString()}</span>
-        </div>:""}
-     
-        {(journeytimeData.videoLink && journeytimeData.videoLink!=="")? 
+          {journeytimeData.videoLink && journeytimeData.videoLink !== '' ? (
             <div className='mb-3 ms-2'>
-              Video Link: <a href={journeytimeData.videoLink} target="_blank">{journeytimeData.videoLink}</a>
+              Video Link:{' '}
+              <a href={journeytimeData.videoLink} target='_blank'>
+                {journeytimeData.videoLink}
+              </a>
             </div>
-            :""}
+          ) : (
+            ''
+          )}
           <div className='row g-5 gx-xxl-12'>
-          <div className='col-xxl-12'>
-          <div ref={mapElement} className="mapDiv" />
+            <div className='col-xxl-12'>
+              <div ref={mapElement} className='mapDiv' />
+            </div>
           </div>
-          </div>
-          
-          
-          
-         
         </div>
       </div>
     </>
@@ -258,7 +284,3 @@ const JourneytimeIDWrapper = () => {
 }
 
 export {JourneytimeIDWrapper}
-
-
-
-
