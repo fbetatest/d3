@@ -122,12 +122,11 @@ const JourneytimeID = () => {
           console.log(geojson)
 
           setTotalDistance(geojson.features[0].properties.summary.lengthInMeters / 1000)
-          const startMarker = geojson.features[0].geometry.coordinates[0]
+
+          const startMarker = locationArr[0].split(',');
           addMarker(startMarker[0], startMarker[1], 'start-marker')
           const endMarker =
-            geojson.features[0].geometry.coordinates[
-              geojson.features[0].properties.sections[0].endPointIndex
-            ]
+          locationArr[locationArr.length-1].split(',');
           addMarker(endMarker[0], endMarker[1], 'end-marker')
 
           let lineCordinates= [];
