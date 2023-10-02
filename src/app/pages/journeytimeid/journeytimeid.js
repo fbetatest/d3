@@ -102,7 +102,7 @@ const JourneytimeID = () => {
         locationArr.map((v, i) => {
           resultStr += v + ':'
           const markerP = v.split(',')
-          addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
+        //  addMarkerWnumber(markerP[0], markerP[1], 'tt-icon-number', i)
         })
 
         resultStr = resultStr.substring(0, resultStr.length - 1)
