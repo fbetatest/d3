@@ -23,7 +23,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
     
   }, [])
 
-
+  const [ddata, setdData]= useState(0)
   return (
     <div className={`card ${className}`}>
       <div></div>
@@ -45,6 +45,10 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
           </Link>
         </div>
       </div>
+
+      {ddata?<>       <button
+                       onClick = { () => {deleteGeofencing(ddata); setGeofencingData(geofencingData.filter(item => item.created!== ddata)); setdData(0);} }
+                      className='btn btn-icon btn-bg-danger btn-active-color-light btn-color-light btn-sm ms-3 mb-1'>Delete</button></>:""}
 
       <div></div>
 
@@ -107,7 +111,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                     <td className='text-end'>
                     {(currentUser?.first_name == "Admin Odc")?
                       <button
-                        onClick = { () => {deleteGeofencing(val.created); setGeofencingData(geofencingData.filter(item => item.created !== val.created))} }
+                      onClick ={()=>{ setdData(val.created) }}
                   
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >

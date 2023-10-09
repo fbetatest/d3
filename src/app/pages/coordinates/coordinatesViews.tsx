@@ -22,7 +22,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
     })
     
   }, [])
-
+  const [ddata, setdData]= useState(0)
 
   return (
     <div className={`card ${className}`}>
@@ -51,6 +51,10 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
       {/* end::Header */}
       {/* begin::Body */}
       <div className='card-body py-3'>
+
+      {ddata?<>       <button
+                       onClick = { () => {deleteCoordinates(ddata); setCoordinatesData(coordinatesData.filter(item => item.created !== ddata)); setdData(0);} }
+                      className='btn btn-icon btn-bg-danger btn-active-color-light btn-color-light btn-sm ms-3 mb-1'>Delete</button></>:""}
         {/* begin::Table container */}
         <div className='table-responsive'>
           {/* begin::Table */}
@@ -119,7 +123,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                       </Link>
                       {(currentUser?.first_name == "Admin Odc")?
                       <button
-                        onClick = { () => {deleteCoordinates(val.created); setCoordinatesData(coordinatesData.filter(item => item.created !== val.created))} }
+                      onClick ={()=>{ setdData(val.created) }}
                   
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                       >

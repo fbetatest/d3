@@ -14,6 +14,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
     {id: 0, checklistName: 'Loading..', projectName: '', surveyorname:[], created: 0, vid:0},
   ])
   const {currentUser} = useAuth()
+  const [ddata, setdData]= useState(0)
   useEffect(() => {
     getAllChecklist().then((val)=>{
    const {data} = val;
@@ -45,7 +46,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
     
   }, [])
 
-
+  
   return (
     <div className={`card ${className}`}>
       <div></div>
@@ -68,11 +69,14 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
         </div>
       </div>
 
-      <div></div>
 
+    
       {/* end::Header */}
       {/* begin::Body */}
       <div className='card-body py-3'>
+       {ddata?<>       <button
+                       onClick = { () => {deleteChecklist(ddata); setChecklistData(checklistData.filter(item => item.vid !== ddata)); setdData(0);} }
+                      className='btn btn-icon btn-bg-danger btn-active-color-light btn-color-light btn-sm ms-3 mb-1'>Delete</button></>:""}
         {/* begin::Table container */}
         <div className='table-responsive'>
           {/* begin::Table */}
@@ -174,8 +178,9 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                       </button>
                       </Link>
                       {(currentUser?.first_name == "Admin Odc")?
+                      <>
                       <button
-                        onClick = { () => {deleteChecklist(val.vid); setChecklistData(checklistData.filter(item => item.vid !== val.vid))} }
+                       onClick ={()=>{ setdData(val.vid) }}
                   
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                       >
@@ -183,7 +188,13 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                           path='/media/icons/duotune/general/gen027.svg'
                           className='svg-icon-3'
                         />
-                      </button>:""
+                      </button>
+               
+                      </>
+                      :""
+
+
+                     
                 }
 
                      

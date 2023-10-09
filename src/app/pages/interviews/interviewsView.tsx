@@ -9,10 +9,13 @@ type Props = {
   className: string
 }
 
+
+
 const TablesWidget11: React.FC<Props> = ({className}) => {
   const [interviewData, setInterviewData] = useState([
     {id: 0, interviewName: 'Loading..', projectName: '', surveyorname:[], created: 0, vid:0},
   ])
+
   const {currentUser} = useAuth()
   useEffect(() => {
     getAllInterview().then((val)=>{
@@ -21,6 +24,8 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
    if(currentUser?.first_name == "Admin Odc"){
    setInterviewData(data)
    }
+
+   
 
    else{
     let interviewDataTemp: any= [];
@@ -45,7 +50,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
     
   }, [])
 
-
+const [ddata, setdData]= useState(0)
   return (
     <div className={`card ${className}`}>
       <div></div>
@@ -67,6 +72,10 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
           </Link>
         </div>
       </div>
+
+      {ddata?<>       <button
+                       onClick = { () => {deleteInterview(ddata); setInterviewData(interviewData.filter(item => item.created!== ddata)); setdData(0);} }
+                      className='btn btn-icon btn-bg-danger btn-active-color-light btn-color-light btn-sm ms-3 mb-1'>Delete</button></>:""}
 
       <div></div>
 
@@ -175,7 +184,7 @@ const TablesWidget11: React.FC<Props> = ({className}) => {
                       </Link>
                       {(currentUser?.first_name == "Admin Odc")?
                       <button
-                        onClick = { () => {deleteInterview(val.vid); setInterviewData(interviewData.filter(item => item.vid !== val.vid))} }
+                      onClick ={()=>{ setdData(val.created) }}
                   
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                       >

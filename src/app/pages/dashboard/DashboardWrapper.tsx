@@ -26,6 +26,9 @@ const DashboardPage: FC = () => {
     },
   ])
 
+  
+  const [ddata, setdData]= useState(0)
+
   useEffect(() => {
     console.log('useEffect')
     getProjects().then((val) => {
@@ -69,6 +72,10 @@ const DashboardPage: FC = () => {
           {/* begin::Body */}
           <div className='card-body py-3'>
             <div className='tab-content'>
+            {ddata?<>       <button
+                       onClick = { () => {deleteProject(ddata); setProjectsData(projectsData.filter(item => item.created!== ddata)); setdData(0);} }
+                      className='btn btn-icon btn-bg-danger btn-active-color-light btn-color-light btn-sm ms-3 mb-1'>Delete</button></>:""}
+
               {/* begin::Tap pane */}
               <div className='tab-pane fade show active' id='kt_table_widget_5_tab_1'>
                 {/* begin::Table container */}
@@ -166,12 +173,7 @@ const DashboardPage: FC = () => {
                                     </button>
                                   </Link>
                                   <button
-                                    onClick={() => {
-                                      deleteProject(val.vid)
-                                      setProjectsData(
-                                        projectsData.filter((item) => item.vid !== val.vid)
-                                      )
-                                    }}
+                                    onClick ={()=>{ setdData(val.created) }}
                                     className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-3 mb-1'
                                   >
                                     <KTSVG
